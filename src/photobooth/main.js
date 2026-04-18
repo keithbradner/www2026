@@ -9,6 +9,11 @@ import { initCamera, stopCamera, startCountdown } from './camera.js'
 import { initEditor, flattenAndExport } from './editor.js'
 import QRCode from 'qrcode'
 
+// Public base URL used for QR codes and gallery links. The kiosk may be
+// serving itself over LAN, but the phone scanning the QR needs the public
+// Railway URL to reach the photo.
+const PUBLIC_BASE_URL = 'https://jhm.up.railway.app'
+
 mountNav('#top-nav')
 
 setElements({
@@ -115,7 +120,7 @@ async function uploadPhoto(dataUrl) {
 }
 
 async function showSuccess(id) {
-    const url = `${window.location.origin}/photo/${id}`
+    const url = `${PUBLIC_BASE_URL}/photo/${id}`
     showPanel('success')
     await QRCode.toCanvas(state.elements.qrCanvas, url, {
         width: 240,
