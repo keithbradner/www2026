@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>What Women Want — Photobooth</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/shared/theme.css" />
+  <link rel="stylesheet" href="/src/shared/nav.css" />
+  <link rel="stylesheet" href="/src/photobooth/photobooth.css" />
+</head>
+<body class="page-photobooth">
+  <div id="top-nav"></div>
+
+  <!-- IDLE / CAMERA -->
+  <section class="panel panel-camera" id="panel-camera">
+    <div class="camera-bg" aria-hidden="true"></div>
+
+    <div class="camera-shell">
+      <header class="camera-header">
+        <div class="camera-kicker">Photobooth</div>
+        <h1 class="camera-title">Strike a <em>pose</em></h1>
+      </header>
+
+      <div class="preview-frame">
+        <div class="preview-ring" aria-hidden="true"></div>
+        <video id="video" playsinline autoplay muted></video>
+        <div class="countdown-overlay hidden" id="countdown-overlay">
+          <div class="countdown-number" id="countdown-number">3</div>
+        </div>
+        <div class="camera-loading" id="camera-loading">Starting camera…</div>
+      </div>
+
+      <button class="capture-btn" id="capture-btn" disabled>
+        <span class="capture-title" id="capture-label">Take photo</span>
+        <span class="capture-sub">3 second timer</span>
+      </button>
+    </div>
+
+    <div class="capture-processing hidden" id="capture-processing">
+      <div class="spinner"></div>
+      <div class="capture-processing-text" id="capture-processing-text">Processing…</div>
+    </div>
+  </section>
+
+  <!-- EDITOR -->
+  <section class="panel panel-editor hidden" id="panel-editor">
+    <div class="editor-stage">
+      <canvas id="editor-canvas"></canvas>
+      <div class="stickers-layer" id="stickers-layer"></div>
+    </div>
+
+    <div class="editor-toolbar">
+      <div class="tool-tabs">
+        <button class="tool-tab active" data-tab="filters">Filters</button>
+        <button class="tool-tab" data-tab="backdrops">Backdrops</button>
+        <button class="tool-tab" data-tab="frames">Frames</button>
+        <button class="tool-tab" data-tab="stickers">Stickers</button>
+      </div>
+
+      <div class="tool-panels">
+        <div class="tool-panel active" data-panel="filters" id="panel-filters"></div>
+        <div class="tool-panel" data-panel="backdrops" id="panel-backdrops"></div>
+        <div class="tool-panel" data-panel="frames" id="panel-frames"></div>
+        <div class="tool-panel" data-panel="stickers" id="panel-stickers"></div>
+      </div>
+
+      <div class="editor-actions">
+        <button class="btn-secondary" id="btn-reset">Reset</button>
+        <button class="btn-primary" id="btn-done">Done →</button>
+      </div>
+    </div>
+
+    <div class="editor-processing hidden" id="editor-processing">
+      <div class="spinner"></div>
+      <div id="editor-processing-text">Working…</div>
+    </div>
+  </section>
+
+  <!-- SUCCESS -->
+  <section class="panel panel-success hidden" id="panel-success">
+    <h2 class="success-title">Your portrait is ready</h2>
+    <p class="success-sub">Scan with your phone to download</p>
+    <div class="qr-card">
+      <canvas id="qr-canvas"></canvas>
+      <p class="qr-link" id="qr-link"></p>
+    </div>
+    <button class="btn-primary" id="btn-again">Take another</button>
+  </section>
+
+  <script type="module" src="/src/photobooth/main.js"></script>
+</body>
+</html>

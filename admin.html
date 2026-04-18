@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — What Women Want</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/shared/theme.css" />
+  <link rel="stylesheet" href="/src/admin/admin.css" />
+</head>
+<body class="page-admin">
+  <header class="admin-header">
+    <h1>What Women Want · Admin</h1>
+    <nav class="admin-tabs">
+      <button class="admin-tab active" data-tab="auction">Auction</button>
+      <button class="admin-tab" data-tab="photos">Photos</button>
+      <button class="admin-tab" data-tab="logs">Logs</button>
+    </nav>
+  </header>
+
+  <main class="admin-body">
+    <section class="admin-panel active" data-panel="auction" id="admin-auction">
+      <div class="panel-actions">
+        <button class="btn-primary" id="btn-new-item">+ New auction item</button>
+      </div>
+      <div class="items-list" id="items-list"></div>
+    </section>
+
+    <section class="admin-panel" data-panel="photos" id="admin-photos">
+      <div class="panel-actions">
+        <span class="panel-count" id="photo-count"></span>
+        <button class="btn-secondary btn-danger" id="btn-delete-all-photos">Delete all</button>
+      </div>
+      <div class="photos-grid" id="photos-grid"></div>
+    </section>
+
+    <section class="admin-panel" data-panel="logs" id="admin-logs">
+      <div class="panel-actions">
+        <select id="log-type-filter">
+          <option value="">All types</option>
+          <option value="visit">visit</option>
+          <option value="post">post</option>
+          <option value="view">view</option>
+          <option value="download">download</option>
+        </select>
+        <button class="btn-secondary" id="btn-refresh-logs">Refresh</button>
+        <button class="btn-secondary btn-danger" id="btn-clear-logs">Clear</button>
+      </div>
+      <table class="logs-table">
+        <thead>
+          <tr><th>When</th><th>Type</th><th>IP</th><th>Path</th><th>Photo</th></tr>
+        </thead>
+        <tbody id="logs-tbody"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- Item editor modal -->
+  <div class="modal hidden" id="item-modal">
+    <div class="modal-card">
+      <header class="modal-header">
+        <h2 id="modal-title">Auction item</h2>
+        <button class="modal-close" id="modal-close">×</button>
+      </header>
+      <div class="modal-body">
+        <label>Title
+          <input type="text" id="field-title" placeholder="Weekend in Paris" />
+        </label>
+        <label>Short tagline
+          <input type="text" id="field-tagline" placeholder="3 nights · Le Marais" />
+        </label>
+        <label>Description
+          <textarea id="field-description" rows="4"></textarea>
+        </label>
+
+        <div class="image-slots" id="image-slots">
+          <!-- 4 slots rendered by admin.js -->
+        </div>
+      </div>
+      <footer class="modal-footer">
+        <button class="btn-secondary" id="modal-cancel">Cancel</button>
+        <button class="btn-primary" id="modal-save">Save</button>
+      </footer>
+    </div>
+  </div>
+
+  <script type="module" src="/src/admin/admin.js"></script>
+</body>
+</html>

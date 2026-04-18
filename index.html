@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>What Women Want — Auction</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/shared/theme.css" />
+  <link rel="stylesheet" href="/src/shared/nav.css" />
+  <link rel="stylesheet" href="/src/auction/carousel.css" />
+</head>
+<body class="page-auction">
+  <div id="top-nav"></div>
+
+  <main class="carousel" id="carousel">
+    <section class="carousel-meta" id="carousel-meta">
+      <p class="item-tagline" id="item-tagline"></p>
+      <h1 class="item-title" id="item-title"></h1>
+      <p class="item-description" id="item-description"></p>
+    </section>
+
+    <div class="carousel-stage" id="carousel-stage">
+      <!-- Collage slots populated by carousel.js -->
+      <div class="collage-slot slot-1" data-slot="1"></div>
+      <div class="collage-slot slot-2" data-slot="2"></div>
+      <div class="collage-slot slot-3" data-slot="3"></div>
+      <div class="collage-slot slot-4" data-slot="4"></div>
+    </div>
+
+    <nav class="carousel-controls">
+      <button class="nav-arrow nav-prev" id="nav-prev" aria-label="Previous">‹</button>
+      <div class="pager" id="pager"></div>
+      <button class="nav-arrow nav-next" id="nav-next" aria-label="Next">›</button>
+    </nav>
+
+    <div class="carousel-empty hidden" id="carousel-empty">
+      <p>No auction items yet.</p>
+      <p class="hint">Add items at <code>/admin</code>.</p>
+    </div>
+  </main>
+
+  <script type="module" src="/src/auction/carousel.js"></script>
+</body>
+</html>
