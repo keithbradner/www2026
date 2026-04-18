@@ -1,11 +1,21 @@
 .page-auction { overflow: hidden; }
 
-/* ============ Page background: notebook paper w/ faint hearts ============ */
-.page-auction body,
+/* ============ Page background: pastel candy stripes + soft glow ============ */
 body.page-auction {
   background:
-    url('/decor/notebook.svg') 0 0 / 200px 200px repeat,
-    linear-gradient(180deg, #fff9ec 0%, #ffe6f0 100%);
+    /* Big soft radial glows for depth */
+    radial-gradient(900px 600px at 12% 8%, rgba(255, 230, 109, 0.45), transparent 65%),
+    radial-gradient(700px 500px at 92% 12%, rgba(255, 144, 194, 0.55), transparent 70%),
+    radial-gradient(900px 700px at 85% 95%, rgba(94, 200, 255, 0.45), transparent 70%),
+    radial-gradient(700px 500px at 8% 92%, rgba(199, 255, 58, 0.35), transparent 70%),
+    /* Diagonal candy stripes */
+    repeating-linear-gradient(
+      135deg,
+      rgba(255, 144, 194, 0.12) 0 42px,
+      rgba(94, 200, 255, 0.12) 42px 84px
+    ),
+    /* Pastel base */
+    linear-gradient(180deg, #fff9ec 0%, #fbe8f2 100%);
 }
 
 .carousel {
@@ -70,29 +80,6 @@ body.page-auction {
   transition: opacity var(--dur) var(--ease-out), transform var(--dur) var(--ease-out);
 }
 .carousel-meta.transitioning { opacity: 0; transform: translateY(-10px); }
-
-/* Tagline stamp */
-.item-tagline-wrap {
-  display: inline-flex;
-  align-items: center;
-  gap: 14px;
-  padding: 8px 22px;
-  background: var(--highlighter);
-  border: 3px solid var(--ink);
-  transform: rotate(-1.5deg);
-  box-shadow: 4px 4px 0 var(--ink);
-  margin-bottom: var(--space-4);
-}
-.stamp-star { color: var(--hot); font-size: 22px; line-height: 1; }
-.item-tagline {
-  font-family: var(--font-tabloid);
-  font-size: 24px;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--ink);
-  margin: 0;
-  line-height: 1;
-}
 
 /* Huge italic gradient title */
 .item-title {

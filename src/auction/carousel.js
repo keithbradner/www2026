@@ -16,7 +16,6 @@ const slotEls = {
     4: document.querySelector('.slot-4')
 }
 const titleEl = document.getElementById('item-title')
-const taglineEl = document.getElementById('item-tagline')
 const descriptionEl = document.getElementById('item-description')
 const metaEl = document.getElementById('carousel-meta')
 const pagerEl = document.getElementById('pager')
@@ -125,7 +124,6 @@ function renderItem(item, { instant } = {}) {
 
     // Meta
     titleEl.textContent = item.title || ''
-    taglineEl.textContent = item.tagline || ''
     descriptionEl.textContent = item.description || ''
 }
 
