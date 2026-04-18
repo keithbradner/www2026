@@ -34,10 +34,17 @@ setElements({
         stickers: document.getElementById('panel-stickers')
     },
 
+    confirmImg: document.getElementById('confirm-img'),
+    btnConfirmBack: document.getElementById('btn-confirm-back'),
+    btnConfirmPost: document.getElementById('btn-confirm-post'),
+
     qrCanvas: document.getElementById('qr-canvas'),
     qrLink: document.getElementById('qr-link'),
     btnAgain: document.getElementById('btn-again')
 })
+
+// Flattened dataURL carries over from editor → confirm → post.
+let pendingDataUrl = null
 
 // --- Stage wiring ---
 state.elements.captureBtn.addEventListener('click', () => {
@@ -54,14 +61,35 @@ async function onCaptureDone(capturedCanvas) {
 state.elements.btnDone.addEventListener('click', async () => {
     state.elements.btnDone.disabled = true
     try {
-        const dataUrl = await flattenAndExport()
-        const { id } = await uploadPhoto(dataUrl)
+        pendingDataUrl = await flattenAndExport()
+        state.elements.confirmImg.src = pendingDataUrl
+        showPanel('confirm')
+    } catch (err) {
+        console.error('Flatten failed:', err)
+        alert('Something went wrong generating your photo. Try again.')
+    } finally {
+        state.elements.btnDone.disabled = false
+    }
+})
+
+state.elements.btnConfirmBack.addEventListener('click', () => {
+    pendingDataUrl = null
+    showPanel('editor')
+})
+
+state.elements.btnConfirmPost.addEventListener('click', async () => {
+    if (!pendingDataUrl) return
+    state.elements.btnConfirmPost.disabled = true
+    const originalText = state.elements.btnConfirmPost.textContent
+    state.elements.btnConfirmPost.textContent = 'Posting…'
+    try {
+        const { id } = await uploadPhoto(pendingDataUrl)
         await showSuccess(id)
     } catch (err) {
         console.error('Upload failed:', err)
         alert('Upload failed. Check the connection and try again.')
-    } finally {
-        state.elements.btnDone.disabled = false
+        state.elements.btnConfirmPost.textContent = originalText
+        state.elements.btnConfirmPost.disabled = false
     }
 })
 

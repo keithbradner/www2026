@@ -91,6 +91,8 @@ function updatePager() {
     })
 }
 
+const SLOT_CAPTIONS = ['dream ♥', 'yes pls', 'omg', 'BFF']
+
 function renderItem(item, { instant } = {}) {
     // Slot images
     for (let slot = 1; slot <= 4; slot++) {
@@ -108,9 +110,14 @@ function renderItem(item, { instant } = {}) {
             imgEl.alt = ''
             imgEl.loading = 'eager'
             el.appendChild(imgEl)
+
+            const caption = document.createElement('div')
+            caption.className = 'slot-caption'
+            caption.textContent = SLOT_CAPTIONS[slot - 1] || ''
+            el.appendChild(caption)
         } else {
             el.classList.add('placeholder')
-            el.textContent = 'coming soon'
+            el.textContent = 'coming soon ✨'
         }
 
         if (!instant) el.classList.add('entering')

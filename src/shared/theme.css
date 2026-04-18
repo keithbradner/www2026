@@ -1,24 +1,49 @@
-/* Design tokens — rosé / champagne / ink */
+/* Design tokens — v2 "Tiger Beat Centerfold" (90s boy-band theme)
+   Legacy rosé/champagne tokens kept for admin continuity. */
 :root {
-  /* Palette */
-  --ink: #1a1520;
-  --ink-soft: #2a2231;
+  /* === Tiger Beat palette === */
+  --hot: #ff3fa4;
+  --hot-deep: #e01f88;
+  --bubblegum: #ff90c2;
+  --cyan: #5ec8ff;
+  --cyan-deep: #2a9cd8;
+  --purple: #8b4cd6;
+  --purple-deep: #5e2fa3;
+  --lime: #c6ff3a;
+  --highlighter: #ffe66d;
+
+  --chrome-0: #f7f7fb;
+  --chrome-1: #d7d9e6;
+  --chrome-2: #8c90a6;
+  --chrome-3: #3d4057;
+
+  --paper: #fff4e6;
+  --paper-deep: #f3e2c8;
+  --ink: #1a0e22;
+  --ink-soft: #2a1a38;
+
+  /* Legacy (admin continuity) */
   --cream: #fbf6ef;
   --cream-warm: #f4e9d9;
-  --rose: #c97a7a;
-  --rose-deep: #a5515a;
-  --rose-pale: #efd3d3;
-  --champagne: #d9b97f;
-  --champagne-deep: #b8964a;
+  --rose: var(--hot);
+  --rose-deep: var(--hot-deep);
+  --rose-pale: #ffd6e7;
+  --champagne: var(--highlighter);
+  --champagne-deep: #c8a24a;
   --gold: #c8a24a;
-  --mauve: #8e6a7a;
-  --shadow: rgba(26, 21, 32, 0.18);
-  --shadow-strong: rgba(26, 21, 32, 0.32);
-  --focus: rgba(201, 122, 122, 0.55);
+  --mauve: var(--purple-deep);
 
-  /* Type */
-  --font-display: "Playfair Display", "Iowan Old Style", Georgia, serif;
+  --shadow: rgba(26, 14, 34, 0.22);
+  --shadow-strong: rgba(26, 14, 34, 0.4);
+  --focus: rgba(255, 63, 164, 0.45);
+
+  /* === Type === */
+  --font-display: "Archivo Black", "Impact", "Haettenschweiler", sans-serif;
+  --font-script: "Permanent Marker", "Caveat", cursive;
+  --font-hand: "Caveat", "Bradley Hand", cursive;
+  --font-tabloid: "Staatliches", "Oswald", "Impact", sans-serif;
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-serif: "Playfair Display", Georgia, serif; /* kept for admin */
 
   /* Radii */
   --radius-sm: 6px;
@@ -26,7 +51,7 @@
   --radius-lg: 24px;
   --radius-pill: 999px;
 
-  /* Spacing ramp */
+  /* Spacing */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -36,8 +61,9 @@
   --space-7: 48px;
   --space-8: 64px;
 
-  /* Durations */
+  /* Motion */
   --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
   --dur-fast: 180ms;
   --dur: 320ms;
   --dur-slow: 600ms;
@@ -50,7 +76,7 @@ html, body {
   padding: 0;
   height: 100%;
   font-family: var(--font-sans);
-  background: var(--cream);
+  background: var(--paper);
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
   overscroll-behavior: none;
@@ -60,14 +86,16 @@ html, body {
 }
 
 body {
-  background:
-    radial-gradient(1200px 800px at 20% -10%, rgba(239, 211, 211, 0.55), transparent 60%),
-    radial-gradient(900px 700px at 100% 100%, rgba(217, 185, 127, 0.35), transparent 60%),
-    var(--cream);
-  background-attachment: fixed;
+  background: var(--paper);
 }
 
-h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; margin: 0; letter-spacing: -0.01em; }
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  margin: 0;
+  letter-spacing: -0.01em;
+  font-style: italic;
+}
 
 button {
   font-family: inherit;
@@ -81,49 +109,111 @@ button {
 
 .hidden { display: none !important; }
 
-.btn-primary,
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  padding: 14px 28px;
-  border-radius: var(--radius-pill);
-  font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: 16px;
-  letter-spacing: 0.02em;
-  transition: transform var(--dur-fast) var(--ease-out),
-              box-shadow var(--dur-fast) var(--ease-out),
-              background var(--dur-fast) var(--ease-out);
-  min-height: 56px;
+/* ======= Reusable utilities ======= */
+
+/* Chrome silver gradient text */
+.chrome-text {
+  background: linear-gradient(180deg,
+    #ffffff 0%,
+    var(--chrome-0) 25%,
+    var(--chrome-1) 50%,
+    var(--chrome-2) 75%,
+    var(--chrome-3) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.2);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
 }
 
-.btn-primary {
-  background: linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%);
-  color: var(--cream);
-  box-shadow: 0 8px 24px rgba(165, 81, 90, 0.35);
+/* Hot-pink → purple gradient text */
+.hot-text {
+  background: linear-gradient(135deg, var(--hot) 0%, var(--purple) 80%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
-.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 12px 32px rgba(165, 81, 90, 0.45); }
-.btn-primary:active { transform: translateY(0); }
-.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
 
-.btn-secondary {
-  background: var(--cream-warm);
-  color: var(--ink);
-  box-shadow: inset 0 0 0 1px rgba(26, 21, 32, 0.12);
+/* Holographic rainbow band (background-image) */
+.holographic {
+  background: linear-gradient(90deg,
+    #ff3fa4 0%, #ff90c2 18%, #ffe66d 36%, #c6ff3a 54%, #5ec8ff 72%, #8b4cd6 90%, #ff3fa4 100%);
+  background-size: 200% 100%;
+  animation: hologram 5s linear infinite;
 }
-.btn-secondary:hover { background: #ebe0cf; }
+@keyframes hologram {
+  to { background-position: 200% 0; }
+}
 
-.btn-danger { color: var(--rose-deep); }
-.btn-danger:hover { background: #f6dcdc; }
+/* Radial starburst backdrop element */
+.starburst {
+  position: absolute;
+  pointer-events: none;
+  background:
+    conic-gradient(from 0deg,
+      var(--hot) 0deg, transparent 8deg,
+      transparent 22deg, var(--cyan) 30deg, transparent 38deg,
+      transparent 52deg, var(--highlighter) 60deg, transparent 68deg,
+      transparent 82deg, var(--hot) 90deg, transparent 98deg,
+      transparent 112deg, var(--cyan) 120deg, transparent 128deg,
+      transparent 142deg, var(--highlighter) 150deg, transparent 158deg,
+      transparent 172deg, var(--hot) 180deg, transparent 188deg,
+      transparent 202deg, var(--cyan) 210deg, transparent 218deg,
+      transparent 232deg, var(--highlighter) 240deg, transparent 248deg,
+      transparent 262deg, var(--hot) 270deg, transparent 278deg,
+      transparent 292deg, var(--cyan) 300deg, transparent 308deg,
+      transparent 322deg, var(--highlighter) 330deg, transparent 338deg,
+      transparent 352deg, var(--hot) 360deg);
+  filter: blur(1px);
+  opacity: 0.55;
+  animation: spinSlow 40s linear infinite;
+}
+@keyframes spinSlow { to { transform: rotate(360deg); } }
 
+/* Scotch-tape strip */
+.tape-strip {
+  position: absolute;
+  width: 92px;
+  height: 28px;
+  background: rgba(255, 230, 109, 0.72);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+.tape-strip::before,
+.tape-strip::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 8px;
+  background:
+    linear-gradient(90deg, transparent 50%, rgba(255, 255, 255, 0.25) 50%),
+    rgba(255, 230, 109, 0.72);
+  background-size: 4px 100%;
+}
+.tape-strip::before { left: -4px; clip-path: polygon(0 0, 100% 0, 80% 50%, 100% 100%, 0 100%); }
+.tape-strip::after { right: -4px; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 20% 50%); }
+.tape-strip.pink { background: rgba(255, 144, 194, 0.7); }
+.tape-strip.pink::before,
+.tape-strip.pink::after { background: rgba(255, 144, 194, 0.7); }
+
+/* Polaroid wrap — used by carousel slots */
+.polaroid {
+  background: #ffffff;
+  padding: 14px 14px 48px;
+  box-shadow:
+    0 18px 36px -12px var(--shadow-strong),
+    0 2px 4px var(--shadow);
+  border-radius: 4px;
+}
+
+/* Forms */
 input, textarea, select {
   font-family: inherit;
   font-size: 15px;
   color: var(--ink);
-  background: var(--cream);
-  border: 1px solid rgba(26, 21, 32, 0.18);
+  background: #fff;
+  border: 1px solid rgba(26, 14, 34, 0.18);
   border-radius: var(--radius-sm);
   padding: 10px 12px;
   width: 100%;
@@ -132,10 +222,57 @@ input, textarea, select {
 }
 input:focus, textarea:focus, select:focus {
   outline: none;
-  border-color: var(--rose);
+  border-color: var(--hot);
   box-shadow: 0 0 0 3px var(--focus);
 }
 
+/* Buttons — default primary is now the hot-pink chrome pill */
+.btn-primary,
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 14px 28px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 900;
+  font-size: 17px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: transform var(--dur-fast) var(--ease-out),
+              box-shadow var(--dur-fast) var(--ease-out),
+              filter var(--dur-fast) var(--ease-out);
+  min-height: 56px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--hot) 0%, var(--hot-deep) 60%, var(--purple) 100%);
+  color: #fff;
+  box-shadow:
+    0 12px 28px -6px rgba(255, 63, 164, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.15);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+}
+.btn-primary:hover { transform: translateY(-2px); filter: brightness(1.05); }
+.btn-primary:active { transform: translateY(0); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; filter: none; }
+
+.btn-secondary {
+  background: linear-gradient(180deg, var(--chrome-0) 0%, var(--chrome-1) 100%);
+  color: var(--ink);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.12),
+    0 4px 10px rgba(0, 0, 0, 0.12);
+}
+.btn-secondary:hover { filter: brightness(1.03); transform: translateY(-1px); }
+
+.btn-danger { color: var(--hot-deep); }
+.btn-danger:hover { background: #ffd6e7; }
+
 ::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-thumb { background: rgba(26, 21, 32, 0.2); border-radius: 999px; }
+::-webkit-scrollbar-thumb { background: rgba(26, 14, 34, 0.2); border-radius: 999px; }
 ::-webkit-scrollbar-track { background: transparent; }

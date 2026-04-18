@@ -3,10 +3,12 @@
  */
 
 export const FRAME_LIBRARY = [
-    { id: 'none',      label: 'None',     src: null },
-    { id: 'classic',   label: 'Classic',  src: '/frames/www-classic.svg' },
-    { id: 'floral',    label: 'Floral',   src: '/frames/www-floral.svg' },
-    { id: 'polaroid',  label: 'Polaroid', src: '/frames/polaroid.svg' }
+    { id: 'none',       label: 'None',        src: null },
+    { id: 'cover',      label: 'Cover Story', src: '/frames/www-cover.svg' },
+    { id: 'pass',       label: 'Backstage',   src: '/frames/backstage-pass.svg' },
+    { id: 'centerfold', label: 'Centerfold',  src: '/frames/trl-centerfold.svg' },
+    { id: 'yearbook',   label: 'Yearbook',    src: '/frames/yearbook.svg' },
+    { id: 'fanclub',    label: 'Fan Club ID', src: '/frames/fan-club.svg' }
 ]
 
 export function renderFramePicker(panelEl, onSelect, currentId) {

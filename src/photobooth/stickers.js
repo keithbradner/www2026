@@ -8,18 +8,29 @@
 import { state } from './state.js'
 
 export const STICKER_LIBRARY = [
-    { id: 'heart',      src: '/stickers/heart.svg',      label: 'Heart' },
-    { id: 'crown',      src: '/stickers/crown.svg',      label: 'Crown' },
-    { id: 'sparkle',    src: '/stickers/sparkle.svg',    label: 'Sparkle' },
-    { id: 'star',       src: '/stickers/star.svg',       label: 'Star' },
-    { id: 'lips',       src: '/stickers/lips.svg',       label: 'Lips' },
-    { id: 'champagne',  src: '/stickers/champagne.svg',  label: 'Bubbly' },
-    { id: 'flower',     src: '/stickers/flower.svg',     label: 'Flower' },
-    { id: 'diamond',    src: '/stickers/diamond.svg',    label: 'Diamond' },
-    { id: 'bow',        src: '/stickers/bow.svg',        label: 'Bow' },
-    { id: 'sunglasses', src: '/stickers/sunglasses.svg', label: 'Shades' },
-    { id: 'coffee',     src: '/stickers/coffee.svg',     label: 'Coffee' },
-    { id: 'clover',     src: '/stickers/clover.svg',     label: 'Luck' }
+    { id: 'heart',        src: '/stickers/heart.svg',        label: 'Heart' },
+    { id: 'heart-arrow',  src: '/stickers/heart-arrow.svg',  label: 'Cupid' },
+    { id: 'star',         src: '/stickers/star.svg',         label: 'Star' },
+    { id: 'sparkle',      src: '/stickers/sparkle.svg',      label: 'Sparkle' },
+    { id: 'crown',        src: '/stickers/crown.svg',        label: 'Crown' },
+    { id: 'boombox',      src: '/stickers/boombox.svg',      label: 'Boombox' },
+    { id: 'cassette',     src: '/stickers/cassette.svg',     label: 'Mixtape' },
+    { id: 'cd',           src: '/stickers/cd.svg',           label: 'CD' },
+    { id: 'vinyl',        src: '/stickers/vinyl.svg',        label: 'Vinyl' },
+    { id: 'microphone',   src: '/stickers/microphone.svg',   label: 'Mic' },
+    { id: 'disco-ball',   src: '/stickers/disco-ball.svg',   label: 'Disco' },
+    { id: 'roller-skate', src: '/stickers/roller-skate.svg', label: 'Skate' },
+    { id: 'pager',        src: '/stickers/pager.svg',        label: 'Pager' },
+    { id: 'butterfly',    src: '/stickers/butterfly.svg',    label: 'Butterfly' },
+    { id: 'daisy',        src: '/stickers/daisy.svg',        label: 'Daisy' },
+    { id: 'rainbow',      src: '/stickers/rainbow.svg',      label: 'Rainbow' },
+    { id: 'lightning',    src: '/stickers/lightning.svg',    label: 'Lightning' },
+    { id: 'peace',        src: '/stickers/peace.svg',        label: 'Peace' },
+    { id: 'yinyang',      src: '/stickers/yinyang.svg',      label: 'Yin Yang' },
+    { id: 'smiley',       src: '/stickers/smiley.svg',       label: 'Smiley' },
+    { id: 'omg',          src: '/stickers/omg.svg',          label: 'OMG!' },
+    { id: 'bff',          src: '/stickers/bff.svg',          label: 'BFF' },
+    { id: 'win',          src: '/stickers/win.svg',          label: 'WIN!' }
 ]
 
 let layerEl = null
@@ -68,23 +79,82 @@ export function addSticker(st) {
     el.style.height = `${size}px`
     el.innerHTML = `
       <img src="${st.src}" alt="" draggable="false" />
-      <button class="sticker-delete" aria-label="Remove">×</button>
+      <button class="sticker-handle sticker-delete" aria-label="Remove">×</button>
+      <button class="sticker-handle sticker-rotate" aria-label="Rotate">↻</button>
+      <button class="sticker-handle sticker-resize" aria-label="Resize">⇲</button>
     `
     const deleteBtn = el.querySelector('.sticker-delete')
-    // pointerdown on the × must not kick off a sticker drag.
-    deleteBtn.addEventListener('pointerdown', (e) => {
-        e.stopPropagation()
-    })
+    deleteBtn.addEventListener('pointerdown', (e) => { e.stopPropagation() })
     deleteBtn.addEventListener('click', (e) => {
         e.stopPropagation()
         removeSticker(data)
     })
 
+    attachRotateHandle(el.querySelector('.sticker-rotate'), el, data)
+    attachResizeHandle(el.querySelector('.sticker-resize'), el, data)
     attachDragHandlers(el, data)
 
     layerEl.appendChild(el)
     state.stickers.push(data)
     select(data)
+}
+
+function attachRotateHandle(handle, el, data) {
+    handle.addEventListener('pointerdown', (e) => {
+        e.stopPropagation()
+        handle.setPointerCapture(e.pointerId)
+        select(data)
+        const rect = el.getBoundingClientRect()
+        const cx = rect.left + rect.width / 2
+        const cy = rect.top + rect.height / 2
+        const startAngle = Math.atan2(e.clientY - cy, e.clientX - cx)
+        const startRot = data.rotation
+
+        const move = (m) => {
+            const a = Math.atan2(m.clientY - cy, m.clientX - cx)
+            data.rotation = startRot + (a - startAngle)
+            applyTransform(data)
+        }
+        const end = () => {
+            handle.removeEventListener('pointermove', move)
+            handle.removeEventListener('pointerup', end)
+            handle.removeEventListener('pointercancel', end)
+        }
+        handle.addEventListener('pointermove', move)
+        handle.addEventListener('pointerup', end)
+        handle.addEventListener('pointercancel', end)
+    })
+    // Swallow clicks to avoid surprise selection side-effects.
+    handle.addEventListener('click', (e) => e.stopPropagation())
+}
+
+function attachResizeHandle(handle, el, data) {
+    handle.addEventListener('pointerdown', (e) => {
+        e.stopPropagation()
+        handle.setPointerCapture(e.pointerId)
+        select(data)
+        const rect = el.getBoundingClientRect()
+        const cx = rect.left + rect.width / 2
+        const cy = rect.top + rect.height / 2
+        const startDist = Math.hypot(e.clientX - cx, e.clientY - cy)
+        const startScale = data.scale || 1
+
+        const move = (m) => {
+            const d = Math.hypot(m.clientX - cx, m.clientY - cy)
+            if (startDist <= 0) return
+            data.scale = clamp(startScale * (d / startDist), 0.3, 4)
+            applyTransform(data)
+        }
+        const end = () => {
+            handle.removeEventListener('pointermove', move)
+            handle.removeEventListener('pointerup', end)
+            handle.removeEventListener('pointercancel', end)
+        }
+        handle.addEventListener('pointermove', move)
+        handle.addEventListener('pointerup', end)
+        handle.addEventListener('pointercancel', end)
+    })
+    handle.addEventListener('click', (e) => e.stopPropagation())
 }
 
 function attachDragHandlers(el, data) {

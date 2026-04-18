@@ -102,6 +102,35 @@ export function compositeOnBackground(sourceCanvas, mask, bgCanvas) {
     return out
 }
 
+/**
+ * Produce a canvas containing just the subject (mask as alpha channel).
+ * Background pixels are fully transparent.
+ */
+export function createMaskedSubject(sourceCanvas, mask) {
+    const w = sourceCanvas.width
+    const h = sourceCanvas.height
+    const out = document.createElement('canvas')
+    out.width = w
+    out.height = h
+    const ctx = out.getContext('2d')
+    ctx.drawImage(sourceCanvas, 0, 0)
+    const imgData = ctx.getImageData(0, 0, w, h)
+    const data = imgData.data
+    for (let i = 0, m = 0; i < data.length; i += 4, m++) {
+        const a = Math.min(1, Math.max(0, mask[m]))
+        data[i + 3] = Math.round(a * 255)
+    }
+    ctx.putImageData(imgData, 0, 0)
+    return out
+}
+
+/**
+ * Render `src` onto `ctx` with cover-fit into (0,0,dw,dh).
+ */
+export function drawCoverTo(ctx, src, dw, dh) {
+    drawCover(ctx, src, dw, dh)
+}
+
 function drawCover(ctx, image, targetW, targetH) {
     const iw = image.width, ih = image.height
     const ta = targetW / targetH, ia = iw / ih

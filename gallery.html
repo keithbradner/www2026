@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery — What Women Want</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Caveat:wght@400;700&family=Inter:wght@300;400;500;600;700&family=Permanent+Marker&family=Staatliches&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/shared/theme.css" />
+  <link rel="stylesheet" href="/src/gallery/gallery.css" />
+</head>
+<body class="page-gallery">
+  <header class="gallery-header">
+    <div class="gallery-kicker">Fan Club</div>
+    <h1 class="gallery-title"><span class="hot-text">THE GALLERY</span></h1>
+    <p class="gallery-sub">every smile from the photobooth</p>
+  </header>
+
+  <main class="gallery-grid" id="gallery-grid"></main>
+
+  <div class="gallery-empty hidden" id="gallery-empty">
+    <p>No photos yet — head to the booth!</p>
+  </div>
+
+  <div class="lightbox hidden" id="lightbox">
+    <img class="lightbox-img" id="lightbox-img" alt="" />
+    <button class="lightbox-close" id="lightbox-close" aria-label="Close">×</button>
+  </div>
+
+  <script type="module" src="/src/gallery/gallery.js"></script>
+</body>
+</html>

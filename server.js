@@ -62,7 +62,7 @@ function getClientIP(req) {
 
 // Log page visits
 app.use(async (req, res, next) => {
-    const pagePaths = ['/', '/photobooth', '/admin']
+    const pagePaths = ['/', '/photobooth', '/gallery', '/admin']
     const isPhotoPage = /^\/photo\/[\w-]+$/.test(req.path)
     if ((pagePaths.includes(req.path) || isPhotoPage) && req.method === 'GET') {
         try {
@@ -375,7 +375,7 @@ async function startServer() {
     } else {
         app.use(rewritePhotoPath)
         app.use(express.static(join(__dirname, 'dist')))
-        const pages = ['index.html', 'photobooth.html', 'photo.html', 'admin.html']
+        const pages = ['index.html', 'photobooth.html', 'photo.html', 'gallery.html', 'admin.html']
         pages.forEach(page => {
             const route = page === 'index.html' ? '/' : `/${page.replace('.html', '')}`
             app.get(route, (_req, res) => {

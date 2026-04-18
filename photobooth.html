@@ -6,7 +6,7 @@
   <title>What Women Want — Photobooth</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Caveat:wght@400;700&family=Inter:wght@300;400;500;600;700&family=Permanent+Marker&family=Staatliches&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/src/shared/theme.css" />
   <link rel="stylesheet" href="/src/shared/nav.css" />
   <link rel="stylesheet" href="/src/photobooth/photobooth.css" />
@@ -16,25 +16,31 @@
 
   <!-- IDLE / CAMERA -->
   <section class="panel panel-camera" id="panel-camera">
-    <div class="camera-bg" aria-hidden="true"></div>
+    <div class="camera-bg" aria-hidden="true">
+      <div class="camera-starburst"></div>
+    </div>
 
     <div class="camera-shell">
       <header class="camera-header">
-        <div class="camera-kicker">Photobooth</div>
-        <h1 class="camera-title">Strike a <em>pose</em></h1>
+        <div class="marquee-strip">
+          <span>★ LIGHTS</span><span>★ CAMERA</span><span>★ FLASH</span><span>★ HIT IT</span><span>★ NO.1 FAN</span>
+        </div>
+        <h1 class="camera-title"><span class="chrome-text">SAY CHEESE!</span></h1>
       </header>
 
       <div class="preview-frame">
         <div class="preview-ring" aria-hidden="true"></div>
+        <span class="preview-badge">#1 FAN</span>
         <video id="video" playsinline autoplay muted></video>
         <div class="countdown-overlay hidden" id="countdown-overlay">
+          <div class="countdown-burst"></div>
           <div class="countdown-number" id="countdown-number">3</div>
         </div>
         <div class="camera-loading" id="camera-loading">Starting camera…</div>
       </div>
 
       <button class="capture-btn" id="capture-btn" disabled>
-        <span class="capture-title" id="capture-label">Take photo</span>
+        <span class="capture-title" id="capture-label">Take Photo</span>
         <span class="capture-sub">3 second timer</span>
       </button>
     </div>
@@ -79,15 +85,47 @@
     </div>
   </section>
 
+  <!-- CONFIRM -->
+  <section class="panel panel-confirm hidden" id="panel-confirm">
+    <div class="confirm-bg" aria-hidden="true"></div>
+    <div class="confirm-shell">
+      <header class="confirm-header">
+        <div class="confirm-kicker">Last step</div>
+        <h2 class="confirm-title"><span class="chrome-text">LOOKING GOOD!</span></h2>
+      </header>
+
+      <div class="confirm-preview">
+        <img id="confirm-img" alt="Your photo preview" />
+      </div>
+
+      <div class="confirm-note">
+        <p>Tap <strong>Post It!</strong> to add your photo to the public fan-club gallery at <code>/gallery</code>. You'll get a QR code to save it to your phone.</p>
+      </div>
+
+      <div class="confirm-actions">
+        <button class="btn-secondary" id="btn-confirm-back">← Keep Editing</button>
+        <button class="btn-primary" id="btn-confirm-post">Post It! ★</button>
+      </div>
+    </div>
+  </section>
+
   <!-- SUCCESS -->
   <section class="panel panel-success hidden" id="panel-success">
-    <h2 class="success-title">Your portrait is ready</h2>
-    <p class="success-sub">Scan with your phone to download</p>
+    <div class="success-burst" aria-hidden="true"></div>
+    <h2 class="success-title"><span class="chrome-text">★ IT'S A HIT! ★</span></h2>
+    <p class="success-sub">scan to grab your glamour shot</p>
     <div class="qr-card">
+      <div class="qr-card-top">
+        <span class="qr-lanyard"></span>
+        <span class="qr-label">ALL ACCESS</span>
+      </div>
       <canvas id="qr-canvas"></canvas>
       <p class="qr-link" id="qr-link"></p>
+      <div class="qr-card-bottom">
+        <span>★ KEEP THIS MEMORY ★</span>
+      </div>
     </div>
-    <button class="btn-primary" id="btn-again">Take another</button>
+    <button class="btn-primary" id="btn-again">Take another ✨</button>
   </section>
 
   <script type="module" src="/src/photobooth/main.js"></script>

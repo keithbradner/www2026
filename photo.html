@@ -6,28 +6,43 @@
   <title>Your Photo — What Women Want</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Caveat:wght@400;700&family=Inter:wght@400;500;600;700&family=Permanent+Marker&family=Staatliches&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/src/shared/theme.css" />
   <link rel="stylesheet" href="/src/photo/photo.css" />
 </head>
 <body class="page-photo">
   <main class="photo-shell">
-    <header class="photo-header">
-      <div class="kicker">What Women Want · 2026</div>
-      <h1>Your photo</h1>
-    </header>
+    <article class="ticket">
+      <header class="ticket-header">
+        <div class="ticket-lanyard"></div>
+        <div class="ticket-title">ALL ACCESS</div>
+        <div class="ticket-sub">WHAT WOMEN WANT · 2026</div>
+        <div class="ticket-barcode" id="ticket-barcode" aria-hidden="true"></div>
+        <div class="ticket-seat">NO. <span id="ticket-id">—</span></div>
+      </header>
 
-    <div class="photo-card" id="photo-card">
-      <img id="photo-img" alt="Your photobooth portrait" />
-      <div class="photo-loading" id="photo-loading">Loading…</div>
-    </div>
+      <div class="ticket-perf top" aria-hidden="true"></div>
 
-    <div class="photo-actions">
-      <button class="btn-primary" id="btn-save">Save Photo</button>
-      <button class="btn-secondary" id="btn-share">Share</button>
-    </div>
+      <div class="photo-card" id="photo-card">
+        <span class="photo-corner corner-tl">★</span>
+        <span class="photo-corner corner-tr">★</span>
+        <span class="photo-corner corner-bl">★</span>
+        <span class="photo-corner corner-br">★</span>
+        <img id="photo-img" alt="Your photobooth portrait" />
+        <div class="photo-loading" id="photo-loading">loading your close-up…</div>
+      </div>
 
-    <footer class="photo-footer">Come back to the booth to take another.</footer>
+      <div class="ticket-caption">★ KEEP THIS MEMORY ★</div>
+
+      <div class="photo-actions">
+        <button class="btn-primary" id="btn-save">Save Photo</button>
+        <button class="btn-secondary" id="btn-share">Share</button>
+      </div>
+
+      <div class="ticket-perf bottom" aria-hidden="true"></div>
+
+      <footer class="photo-footer">~ come back to the booth for another ~</footer>
+    </article>
   </main>
 
   <script type="module" src="/src/photo/photo.js"></script>

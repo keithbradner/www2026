@@ -1,15 +1,20 @@
 /**
- * Backdrop picker — runs MODNet segmentation on the captured image and
- * composites the subject over the chosen backdrop.
+ * Backdrop picker — runs MODNet segmentation on the captured image so that
+ * the editor can composite the subject over a chosen backdrop at render time
+ * (keeps the filter applied to the subject only, not the backdrop).
  */
 
-import { segment, compositeOnBackground } from './segmentation.js'
+import { segment } from './segmentation.js'
 
 export const BACKDROP_LIBRARY = [
-    { id: 'none',        label: 'Original',     src: null },
-    { id: 'rose',        label: 'Rose Garden',  src: '/backdrops/rose-garden.svg' },
-    { id: 'champagne',   label: 'Champagne',    src: '/backdrops/champagne-room.svg' },
-    { id: 'seaside',     label: 'Seaside',      src: '/backdrops/seaside.svg' }
+    { id: 'none',    label: 'Original',      src: null },
+    { id: 'stage',   label: 'Concert Stage', src: '/backdrops/concert-stage.svg' },
+    { id: 'trl',     label: 'TRL Studio',    src: '/backdrops/trl-studio.svg' },
+    { id: 'bedroom', label: 'Teen Bedroom',  src: '/backdrops/teen-bedroom.svg' },
+    { id: 'mall',    label: 'Mall',          src: '/backdrops/mall.svg' },
+    { id: 'limo',    label: 'Limo',          src: '/backdrops/limo.svg' },
+    { id: 'coshocton', label: 'Coshocton',   src: '/backdrops/coshocton.svg' },
+    { id: 'diary',     label: 'Dear Diary',  src: '/backdrops/diary-page.svg' }
 ]
 
 export function renderBackdropPicker(panelEl, onSelect, currentId) {
@@ -30,26 +35,17 @@ export function renderBackdropPicker(panelEl, onSelect, currentId) {
     }
 }
 
-/**
- * Given the original capture canvas + a chosen backdrop,
- * run segmentation (once, cached) and composite the result.
- * Returns a new HTMLCanvasElement at the same resolution as capturedCanvas.
- */
 let cachedMask = null
 let cachedSource = null
 
-export async function renderWithBackdrop(capturedCanvas, backdropSrc) {
-    if (!backdropSrc) return capturedCanvas // Original — caller uses capturedCanvas directly
-
+/** Lazy-compute & cache the MODNet mask for the captured canvas. */
+export async function getMaskFor(capturedCanvas) {
     if (cachedSource !== capturedCanvas) {
         cachedMask = null
         cachedSource = capturedCanvas
     }
     if (!cachedMask) cachedMask = await segment(capturedCanvas)
-
-    const bgImg = await loadImage(backdropSrc)
-    const bgCanvas = imageToCanvas(bgImg, capturedCanvas.width, capturedCanvas.height)
-    return compositeOnBackground(capturedCanvas, cachedMask, bgCanvas)
+    return cachedMask
 }
 
 export function clearBackdropCache() {
@@ -57,7 +53,8 @@ export function clearBackdropCache() {
     cachedSource = null
 }
 
-function loadImage(src) {
+/** Load a backdrop image and return it as an HTMLImageElement. */
+export function loadBackdropImage(src) {
     return new Promise((resolve, reject) => {
         const img = new Image()
         img.crossOrigin = 'anonymous'
@@ -65,19 +62,4 @@ function loadImage(src) {
         img.onerror = reject
         img.src = src
     })
-}
-
-function imageToCanvas(img, w, h) {
-    const c = document.createElement('canvas')
-    c.width = w
-    c.height = h
-    const ctx = c.getContext('2d')
-    // Cover fit
-    const ia = img.naturalWidth / img.naturalHeight
-    const ta = w / h
-    let dw, dh, dx, dy
-    if (ia > ta) { dh = h; dw = dh * ia; dx = (w - dw) / 2; dy = 0 }
-    else { dw = w; dh = dw / ia; dx = 0; dy = (h - dh) / 2 }
-    ctx.drawImage(img, dx, dy, dw, dh)
-    return c
 }

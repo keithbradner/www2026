@@ -8,6 +8,9 @@ const imgEl = document.getElementById('photo-img')
 const loadingEl = document.getElementById('photo-loading')
 const btnSave = document.getElementById('btn-save')
 const btnShare = document.getElementById('btn-share')
+const ticketIdEl = document.getElementById('ticket-id')
+
+if (ticketIdEl) ticketIdEl.textContent = (PHOTO_ID || '——').toUpperCase()
 
 let dataUrl = null
 

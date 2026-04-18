@@ -13,6 +13,7 @@ export default defineConfig({
         main: resolve(__dirname, 'index.html'),
         photobooth: resolve(__dirname, 'photobooth.html'),
         photo: resolve(__dirname, 'photo.html'),
+        gallery: resolve(__dirname, 'gallery.html'),
         admin: resolve(__dirname, 'admin.html')
       }
     }
