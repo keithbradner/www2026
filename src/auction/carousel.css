@@ -81,6 +81,29 @@ body.page-auction {
 }
 .carousel-meta.transitioning { opacity: 0; transform: translateY(-10px); }
 
+/* Tagline stamp */
+.item-tagline-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 22px;
+  background: var(--highlighter);
+  border: 3px solid var(--ink);
+  transform: rotate(-1.5deg);
+  box-shadow: 4px 4px 0 var(--ink);
+  margin-bottom: var(--space-4);
+}
+.stamp-star { color: var(--hot); font-size: 22px; line-height: 1; }
+.item-tagline {
+  font-family: var(--font-tabloid);
+  font-size: 24px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 0;
+  line-height: 1;
+}
+
 /* Huge italic gradient title */
 .item-title {
   font-family: var(--font-display);
@@ -135,9 +158,9 @@ body.page-auction {
   transform: skewX(-20deg);
 }
 .item-description {
-  font-family: var(--font-hand);
-  font-size: 28px;
-  line-height: 1.3;
+  font-family: var(--font-sans);
+  font-size: 22px;
+  line-height: 1.45;
   color: var(--ink);
   margin: 0;
 }

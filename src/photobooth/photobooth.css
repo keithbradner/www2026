@@ -776,8 +776,9 @@
 .qr-card-bottom {
   padding-top: 10px;
   border-top: 2px dashed rgba(26, 14, 34, 0.35);
-  font-family: var(--font-tabloid);
-  font-size: 14px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
   color: var(--ink);
-  letter-spacing: 0.2em;
+  letter-spacing: 0.08em;
 }
