@@ -63,8 +63,7 @@ function getClientIP(req) {
 // Log page visits
 app.use(async (req, res, next) => {
     const pagePaths = ['/', '/photobooth', '/gallery', '/admin']
-    const isPhotoPage = /^\/photo\/[\w-]+$/.test(req.path)
-    if ((pagePaths.includes(req.path) || isPhotoPage) && req.method === 'GET') {
+    if (pagePaths.includes(req.path) && req.method === 'GET') {
         try {
             await log('visit', {
                 ip: getClientIP(req),
@@ -129,12 +128,6 @@ app.get('/api/photos/:id', async (req, res) => {
         const photo = await getPhoto(req.params.id)
         if (!photo) return res.status(404).json({ error: 'Photo not found' })
 
-        await log('view', {
-            ip: getClientIP(req),
-            photoId: photo.id,
-            userAgent: req.headers['user-agent']
-        })
-
         res.json({
             id: photo.id,
             image: photo.image,
@@ -142,6 +135,39 @@ app.get('/api/photos/:id', async (req, res) => {
         })
     } catch (error) {
         res.status(500).json({ error: 'Failed to get photo' })
+    }
+})
+
+// Binary image bytes for gallery tiles + lightbox. Decodes the stored
+// data URL once and returns raw bytes so <img src=".../image"> can use the
+// browser's HTTP cache instead of JSON-wrapping a multi-MB base64 string on
+// every render.
+app.get('/api/photos/:id/image', async (req, res) => {
+    try {
+        const photo = await getPhoto(req.params.id)
+        if (!photo) return res.status(404).end()
+        const match = /^data:([^;]+);base64,(.+)$/.exec(photo.image || '')
+        if (!match) return res.status(500).end()
+        const [, mime, b64] = match
+        res.setHeader('Content-Type', mime)
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable')
+        res.send(Buffer.from(b64, 'base64'))
+    } catch (error) {
+        console.error(error)
+        res.status(500).end()
+    }
+})
+
+app.post('/api/photos/:id/log-view', async (req, res) => {
+    try {
+        await log('view', {
+            ip: getClientIP(req),
+            photoId: req.params.id,
+            userAgent: req.headers['user-agent']
+        })
+        res.json({ success: true })
+    } catch {
+        res.status(500).json({ error: 'Failed to log view' })
     }
 })
 
@@ -353,19 +379,10 @@ app.delete('/api/admin/logs', async (req, res) => {
 // ------------------------------------------------------------------
 // Page routes
 // ------------------------------------------------------------------
-// /photo/:id is rewritten to photo.html; the client reads id from location.
-function rewritePhotoPath(req, _res, next) {
-    if (/^\/photo\/[\w-]+$/.test(req.path) && req.method === 'GET') {
-        req.url = '/photo.html' + (req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '')
-    }
-    next()
-}
-
 async function startServer() {
     await initDatabase()
 
     if (isDev) {
-        app.use(rewritePhotoPath)
         const vite = await createViteServer({
             server: { middlewareMode: true },
             appType: 'mpa'
@@ -373,9 +390,8 @@ async function startServer() {
         app.use(vite.middlewares)
         console.log('Vite dev server integrated')
     } else {
-        app.use(rewritePhotoPath)
         app.use(express.static(join(__dirname, 'dist')))
-        const pages = ['index.html', 'photobooth.html', 'photo.html', 'gallery.html', 'admin.html']
+        const pages = ['index.html', 'photobooth.html', 'gallery.html', 'admin.html']
         pages.forEach(page => {
             const route = page === 'index.html' ? '/' : `/${page.replace('.html', '')}`
             app.get(route, (_req, res) => {
@@ -393,7 +409,7 @@ async function startServer() {
 ║  Pages:                                                     ║
 ║   /             Auction carousel                            ║
 ║   /photobooth   Photobooth                                  ║
-║   /photo/:id    Download page (QR target)                   ║
+║   /gallery      Photo wall (QR target)                      ║
 ║   /admin        Admin                                       ║
 ║                                                             ║
 ║  Mode: ${isDev ? 'Development (Vite HMR)          ' : 'Production                       '}                    ║

@@ -89,10 +89,11 @@ state.elements.btnConfirmPost.addEventListener('click', async () => {
     state.elements.btnConfirmPost.textContent = 'Posting…'
     try {
         const { id } = await uploadPhoto(pendingDataUrl)
+        if (!id) throw new Error('Server did not return a photo id')
         await showSuccess(id)
     } catch (err) {
         console.error('Upload failed:', err)
-        alert('Upload failed. Check the connection and try again.')
+        alert(uploadErrorMessage(err))
         state.elements.btnConfirmPost.textContent = originalText
         state.elements.btnConfirmPost.disabled = false
     }
@@ -115,12 +116,26 @@ async function uploadPhoto(dataUrl) {
             }
         })
     })
-    if (!res.ok) throw new Error(`Upload failed: ${res.status}`)
+    if (!res.ok) {
+        let serverMsg = ''
+        try { serverMsg = (await res.json()).error || '' } catch {}
+        const err = new Error(`Upload failed: ${res.status}${serverMsg ? ` — ${serverMsg}` : ''}`)
+        err.status = res.status
+        err.serverMsg = serverMsg
+        throw err
+    }
     return await res.json()
 }
 
+function uploadErrorMessage(err) {
+    if (err?.status === 413) return 'Photo is too large to upload. Try again with fewer stickers.'
+    if (err?.status >= 500) return `Server error (${err.status}). Try again in a moment.`
+    if (err?.status) return `Upload failed (${err.status}). ${err.serverMsg || 'Try again.'}`
+    return 'Upload failed. Check the connection and try again.'
+}
+
 async function showSuccess(id) {
-    const url = `${PUBLIC_BASE_URL}/photo/${id}`
+    const url = `${PUBLIC_BASE_URL}/gallery?photo=${id}`
     showPanel('success')
     await QRCode.toCanvas(state.elements.qrCanvas, url, {
         width: 240,

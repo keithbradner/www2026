@@ -152,6 +152,15 @@ body.page-auction {
   min-height: 0;
   max-width: 900px;
   margin: 0 auto;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+}
+.carousel-stage img {
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .collage-slot {

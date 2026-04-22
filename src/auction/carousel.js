@@ -160,25 +160,44 @@ function attachControls() {
     nextBtn.addEventListener('click', next)
     prevBtn.addEventListener('click', prev)
 
-    // Swipe (pointer events)
+    // Swipe. CSS sets touch-action: pan-y on the stage so the browser still
+    // handles vertical scroll but leaves horizontal gestures to us; pointer
+    // capture keeps the stream alive if the finger drifts outside the stage.
     let startX = null
+    let startY = null
     let startT = 0
+    let activePointer = null
+
     stageEl.addEventListener('pointerdown', (e) => {
+        if (e.pointerType === 'mouse' && e.button !== 0) return
         startX = e.clientX
+        startY = e.clientY
         startT = Date.now()
+        activePointer = e.pointerId
+        try { stageEl.setPointerCapture(e.pointerId) } catch {}
     })
-    stageEl.addEventListener('pointerup', (e) => {
-        if (startX === null) return
+
+    function endSwipe(e, cancelled) {
+        if (startX === null || e.pointerId !== activePointer) return
+        try { stageEl.releasePointerCapture(e.pointerId) } catch {}
         const dx = e.clientX - startX
+        const dy = e.clientY - startY
         const dt = Date.now() - startT
-        startX = null
+        startX = startY = null
+        activePointer = null
+        if (cancelled) return
         if (dt > 700) return
+        // Mostly-vertical gestures are scroll attempts — ignore.
+        if (Math.abs(dy) > Math.abs(dx)) return
         if (dx <= -SWIPE_THRESHOLD) next()
         else if (dx >= SWIPE_THRESHOLD) prev()
-    })
-    stageEl.addEventListener('pointercancel', () => { startX = null })
+    }
+    stageEl.addEventListener('pointerup', (e) => endSwipe(e, false))
+    stageEl.addEventListener('pointercancel', (e) => endSwipe(e, true))
 
-    // Keyboard
+    // Native image drag on desktop will abort the pointer stream mid-swipe.
+    stageEl.addEventListener('dragstart', (e) => e.preventDefault())
+
     window.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowLeft') prev()
         else if (e.key === 'ArrowRight') next()

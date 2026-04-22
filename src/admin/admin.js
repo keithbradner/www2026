@@ -191,7 +191,8 @@ async function refreshPhotos() {
           <button class="tile-delete" title="Delete">×</button>
         `
         const img = tile.querySelector('img')
-        fetch(`/api/photos/${p.id}`).then(r => r.json()).then(d => { img.src = d.image }).catch(() => {})
+        img.loading = 'lazy'
+        img.src = `/api/photos/${p.id}/image`
 
         img.addEventListener('click', () => {
             if (img.src) openPhotoLightbox(img.src)
