@@ -671,7 +671,13 @@
 }
 .success-burst {
   position: absolute;
-  inset: 0;
+  left: 50%;
+  top: 50%;
+  width: 150vmax;
+  height: 150vmax;
+  margin-left: -75vmax;
+  margin-top: -75vmax;
+  border-radius: 50%;
   background:
     conic-gradient(from 0deg,
       rgba(255, 63, 164, 0.2) 0deg, transparent 12deg,
