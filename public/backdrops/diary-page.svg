@@ -1,1 +1,269 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" preserveAspectRatio="xMidYMid slice" font-family="Archivo Black, Impact, Haettenschweiler, Arial Black, sans-serif"><!-- Notebook paper: cream bg + ruled lines + red margin --><rect width="800" height="1000" fill="#fff9ec"/><!-- Ruled lines --><g stroke="#b6d4ea" stroke-width="1.5"><line x1="0" y1="120" x2="800" y2="120"/><line x1="0" y1="170" x2="800" y2="170"/><line x1="0" y1="220" x2="800" y2="220"/><line x1="0" y1="270" x2="800" y2="270"/><line x1="0" y1="320" x2="800" y2="320"/><line x1="0" y1="370" x2="800" y2="370"/><line x1="0" y1="420" x2="800" y2="420"/><line x1="0" y1="470" x2="800" y2="470"/><line x1="0" y1="520" x2="800" y2="520"/><line x1="0" y1="570" x2="800" y2="570"/><line x1="0" y1="620" x2="800" y2="620"/><line x1="0" y1="670" x2="800" y2="670"/><line x1="0" y1="720" x2="800" y2="720"/><line x1="0" y1="770" x2="800" y2="770"/><line x1="0" y1="820" x2="800" y2="820"/><line x1="0" y1="870" x2="800" y2="870"/><line x1="0" y1="920" x2="800" y2="920"/></g><!-- Red margin line --><line x1="108" y1="0" x2="108" y2="1000" stroke="#ff3fa4" stroke-width="2"/><!-- Three hole punches --><circle cx="54" cy="160" r="14" fill="#fff" stroke="#1a0e22" stroke-width="2"/><circle cx="54" cy="500" r="14" fill="#fff" stroke="#1a0e22" stroke-width="2"/><circle cx="54" cy="840" r="14" fill="#fff" stroke="#1a0e22" stroke-width="2"/><!-- Top handwritten date --><text x="140" y="80" font-family="Caveat, cursive" font-size="42" fill="#1a0e22">Dear Diary ~</text><text x="520" y="80" font-family="Caveat, cursive" font-size="32" fill="#ff3fa4" transform="rotate(-4 520 80)">Oct. 14, 1999</text><!-- Bottom handwritten sign-off --><text x="140" y="970" font-family="Caveat, cursive" font-size="44" fill="#1a0e22" transform="rotate(-2 140 970)">♥ BFF 4EVR ♥</text><!-- Corner doodles --><g fill="#ff90c2" stroke="#1a0e22" stroke-width="3"><path d="M720 140 C 700 120, 704 96, 724 96 C 732 96, 736 104, 736 110 C 736 104, 740 96, 748 96 C 768 96, 772 120, 752 140 L 736 152 Z"/></g><g fill="#ffe66d" stroke="#1a0e22" stroke-width="2.5"><path d="M700 920 L708 938 L728 940 L712 952 L716 970 L700 960 L684 970 L688 952 L672 940 L692 938 Z"/></g><g fill="#5ec8ff" stroke="#1a0e22" stroke-width="2"><path d="M90 960 L96 972 L108 974 L98 982 L100 994 L90 988 L80 994 L82 982 L72 974 L84 972 Z" transform="rotate(-10 90 974)"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="paperShade" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff9ec"/>
+      <stop offset="1" stop-color="#fff4e6"/>
+    </linearGradient>
+    <linearGradient id="dogEar" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f3e2c8"/>
+      <stop offset="1" stop-color="#c8a24a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Paper base -->
+  <rect width="800" height="1000" fill="url(#paperShade)"/>
+  <!-- Subtle paper texture speckle -->
+  <g fill="#c8a24a" opacity="0.15">
+    <circle cx="80" cy="240" r="1"/><circle cx="220" cy="360" r="1"/><circle cx="420" cy="180" r="1"/><circle cx="560" cy="480" r="1"/><circle cx="700" cy="240" r="1"/><circle cx="160" cy="620" r="1"/><circle cx="520" cy="720" r="1"/><circle cx="680" cy="560" r="1"/><circle cx="340" cy="820" r="1"/>
+  </g>
+
+  <!-- Ruled lines (faint blue) -->
+  <g stroke="#b6d4ea" stroke-width="1.3" opacity="0.85">
+    <line x1="0" y1="120" x2="800" y2="120"/>
+    <line x1="0" y1="160" x2="800" y2="160"/>
+    <line x1="0" y1="200" x2="800" y2="200"/>
+    <line x1="0" y1="240" x2="800" y2="240"/>
+    <line x1="0" y1="280" x2="800" y2="280"/>
+    <line x1="0" y1="320" x2="800" y2="320"/>
+    <line x1="0" y1="360" x2="800" y2="360"/>
+    <line x1="0" y1="400" x2="800" y2="400"/>
+    <line x1="0" y1="440" x2="800" y2="440"/>
+    <line x1="0" y1="480" x2="800" y2="480"/>
+    <line x1="0" y1="520" x2="800" y2="520"/>
+    <line x1="0" y1="560" x2="800" y2="560"/>
+    <line x1="0" y1="600" x2="800" y2="600"/>
+    <line x1="0" y1="640" x2="800" y2="640"/>
+    <line x1="0" y1="680" x2="800" y2="680"/>
+    <line x1="0" y1="720" x2="800" y2="720"/>
+    <line x1="0" y1="760" x2="800" y2="760"/>
+    <line x1="0" y1="800" x2="800" y2="800"/>
+    <line x1="0" y1="840" x2="800" y2="840"/>
+    <line x1="0" y1="880" x2="800" y2="880"/>
+    <line x1="0" y1="920" x2="800" y2="920"/>
+  </g>
+
+  <!-- Red margin line -->
+  <line x1="108" y1="0" x2="108" y2="1000" stroke="#ff3fa4" stroke-width="2"/>
+
+  <!-- SPIRAL BINDING along left edge -->
+  <rect x="40" y="0" width="36" height="1000" fill="#fff4e6" stroke="#1a0e22" stroke-width="1.2" opacity="0.6"/>
+  <g stroke="#8c90a6" stroke-width="3" fill="none">
+    <!-- Spiral rings: arc over the top of paper, into each hole -->
+    <path d="M48 30 Q 58 14 72 22 Q 60 40 48 30 Z"/>
+    <path d="M48 70 Q 58 54 72 62 Q 60 80 48 70 Z"/>
+    <path d="M48 110 Q 58 94 72 102 Q 60 120 48 110 Z"/>
+    <path d="M48 150 Q 58 134 72 142 Q 60 160 48 150 Z"/>
+    <path d="M48 190 Q 58 174 72 182 Q 60 200 48 190 Z"/>
+    <path d="M48 230 Q 58 214 72 222 Q 60 240 48 230 Z"/>
+    <path d="M48 270 Q 58 254 72 262 Q 60 280 48 270 Z"/>
+    <path d="M48 310 Q 58 294 72 302 Q 60 320 48 310 Z"/>
+    <path d="M48 350 Q 58 334 72 342 Q 60 360 48 350 Z"/>
+    <path d="M48 390 Q 58 374 72 382 Q 60 400 48 390 Z"/>
+    <path d="M48 430 Q 58 414 72 422 Q 60 440 48 430 Z"/>
+    <path d="M48 470 Q 58 454 72 462 Q 60 480 48 470 Z"/>
+    <path d="M48 510 Q 58 494 72 502 Q 60 520 48 510 Z"/>
+    <path d="M48 550 Q 58 534 72 542 Q 60 560 48 550 Z"/>
+    <path d="M48 590 Q 58 574 72 582 Q 60 600 48 590 Z"/>
+    <path d="M48 630 Q 58 614 72 622 Q 60 640 48 630 Z"/>
+    <path d="M48 670 Q 58 654 72 662 Q 60 680 48 670 Z"/>
+    <path d="M48 710 Q 58 694 72 702 Q 60 720 48 710 Z"/>
+    <path d="M48 750 Q 58 734 72 742 Q 60 760 48 750 Z"/>
+    <path d="M48 790 Q 58 774 72 782 Q 60 800 48 790 Z"/>
+    <path d="M48 830 Q 58 814 72 822 Q 60 840 48 830 Z"/>
+    <path d="M48 870 Q 58 854 72 862 Q 60 880 48 870 Z"/>
+    <path d="M48 910 Q 58 894 72 902 Q 60 920 48 910 Z"/>
+    <path d="M48 950 Q 58 934 72 942 Q 60 960 48 950 Z"/>
+  </g>
+
+  <!-- TOP HEADER: Dear Diary + date -->
+  <text x="140" y="82" font-family="Caveat, cursive" font-size="52" fill="#1a0e22">Dear Diary ~</text>
+  <text x="530" y="74" font-family="Caveat, cursive" font-size="30" fill="#ff3fa4" transform="rotate(-4 530 74)">Oct. 14, 1999</text>
+  <g transform="translate(420 46) rotate(-2)">
+    <rect x="0" y="0" width="70" height="18" fill="#5ec8ff" opacity="0.7"/>
+    <line x1="0" y1="9" x2="70" y2="9" stroke="#fff" stroke-width="1.2" opacity="0.6"/>
+  </g>
+
+  <!-- Washi tape across top -->
+  <g transform="translate(130 96) rotate(-3)">
+    <rect x="0" y="0" width="160" height="14" fill="#ff90c2" opacity="0.75"/>
+    <g stroke="#fff" stroke-width="1" opacity="0.6">
+      <line x1="10" y1="0" x2="10" y2="14"/><line x1="30" y1="0" x2="30" y2="14"/><line x1="50" y1="0" x2="50" y2="14"/><line x1="70" y1="0" x2="70" y2="14"/><line x1="90" y1="0" x2="90" y2="14"/><line x1="110" y1="0" x2="110" y2="14"/><line x1="130" y1="0" x2="130" y2="14"/><line x1="150" y1="0" x2="150" y2="14"/>
+    </g>
+  </g>
+
+  <!-- POLAROID taped in TOP-LEFT corner -->
+  <g transform="translate(130 140) rotate(-6)">
+    <rect x="-6" y="-6" width="196" height="232" fill="#1a0e22" opacity="0.15"/>
+    <rect x="0" y="0" width="190" height="226" fill="#fff"/>
+    <rect x="10" y="10" width="170" height="150" fill="#ff3fa4"/>
+    <!-- Boy-band cutout silhouette -->
+    <g fill="#ffe66d" stroke="#1a0e22" stroke-width="2">
+      <circle cx="60" cy="70" r="20"/>
+      <circle cx="130" cy="70" r="20"/>
+    </g>
+    <g fill="#1a0e22">
+      <circle cx="54" cy="66" r="2"/><circle cx="66" cy="66" r="2"/>
+      <circle cx="124" cy="66" r="2"/><circle cx="136" cy="66" r="2"/>
+    </g>
+    <g stroke="#1a0e22" stroke-width="2" fill="none">
+      <path d="M52 78 Q 60 82 68 78"/>
+      <path d="M122 78 Q 130 82 138 78"/>
+    </g>
+    <g fill="#1a0e22">
+      <path d="M42 52 L80 52 L76 46 L46 46 Z"/>
+      <path d="M112 52 L150 52 L146 46 L116 46 Z"/>
+    </g>
+    <path d="M30 120 Q 60 140 95 130 Q 130 140 160 120" stroke="#1a0e22" stroke-width="2" fill="none"/>
+    <text x="95" y="194" text-anchor="middle" font-family="Caveat, cursive" font-size="26" fill="#1a0e22">The Boys ♥</text>
+    <!-- Tape corners -->
+    <rect x="-18" y="-12" width="46" height="16" fill="#ffe66d" opacity="0.85" transform="rotate(-18 -18 -12)"/>
+    <rect x="164" y="-16" width="46" height="16" fill="#5ec8ff" opacity="0.75" transform="rotate(16 164 -16)"/>
+  </g>
+
+  <!-- HEADLINE: SECRET CRUSH -->
+  <g transform="translate(380 170)">
+    <text x="0" y="0" font-family="Caveat, cursive" font-size="40" fill="#1a0e22" font-weight="700">SECRET</text>
+    <text x="0" y="42" font-family="Caveat, cursive" font-size="44" fill="#ff3fa4" font-weight="700">CRUSH ☆</text>
+    <path d="M-10 50 L180 50" stroke="#ff3fa4" stroke-width="2" opacity="0.6"/>
+  </g>
+
+  <!-- MASH game grid -->
+  <g transform="translate(380 260)">
+    <text x="0" y="0" font-family="Caveat, cursive" font-size="22" fill="#1a0e22">M · A · S · H</text>
+    <g font-family="Caveat, cursive" font-size="15" fill="#1a0e22">
+      <text x="0" y="22">M: mansion</text>
+      <text x="0" y="42">A: apartment</text>
+      <text x="0" y="62">S: shack ✗</text>
+      <text x="0" y="82">H: house ♥</text>
+    </g>
+    <text x="110" y="22" font-family="Caveat, cursive" font-size="15" fill="#e01f88">kids: 3</text>
+    <text x="110" y="42" font-family="Caveat, cursive" font-size="15" fill="#e01f88">car: limo</text>
+    <text x="110" y="62" font-family="Caveat, cursive" font-size="15" fill="#e01f88">$$$: 💰</text>
+    <text x="110" y="82" font-family="Caveat, cursive" font-size="15" fill="#e01f88">job: star</text>
+  </g>
+
+  <!-- MOVIE TICKET STUB (glued in) -->
+  <g transform="translate(600 220) rotate(-8)">
+    <rect x="0" y="0" width="160" height="50" fill="#ffe66d" stroke="#1a0e22" stroke-width="2"/>
+    <path d="M120 0 L120 50" stroke="#1a0e22" stroke-width="1.5" stroke-dasharray="3 3"/>
+    <text x="10" y="22" font-family="Archivo Black, Impact, sans-serif" font-style="italic" font-size="12" fill="#1a0e22">WORLD TOUR ’99</text>
+    <text x="10" y="40" font-family="Staatliches, Impact, sans-serif" font-size="10" fill="#1a0e22" letter-spacing="1">ROW A SEAT 1 · ADMIT ONE</text>
+    <text x="144" y="34" text-anchor="middle" font-family="Archivo Black, Impact, sans-serif" font-style="italic" font-size="22" fill="#ff3fa4">01</text>
+    <rect x="-10" y="-8" width="40" height="12" fill="#5ec8ff" opacity="0.7" transform="rotate(-18 -10 -8)"/>
+  </g>
+
+  <!-- QUIZ SCRAP: which boy? -->
+  <g transform="translate(580 320) rotate(5)">
+    <rect x="-6" y="-6" width="196" height="128" fill="#fff4e6" opacity="0.3"/>
+    <rect x="0" y="0" width="184" height="116" fill="#fff" stroke="#1a0e22" stroke-width="1.5"/>
+    <rect x="0" y="0" width="184" height="22" fill="#ff90c2"/>
+    <text x="92" y="16" text-anchor="middle" font-family="Archivo Black, Impact, sans-serif" font-style="italic" font-size="12" fill="#1a0e22">WHICH BOY ARE YOU?</text>
+    <g font-family="Caveat, cursive" font-size="16" fill="#1a0e22">
+      <text x="10" y="42">○ the shy one</text>
+      <text x="10" y="62">● the cute one ♥</text>
+      <text x="10" y="82">○ the dancer</text>
+      <text x="10" y="102">○ the bad boy</text>
+    </g>
+    <rect x="60" y="-10" width="56" height="16" fill="#5ec8ff" opacity="0.7" transform="rotate(-3)"/>
+  </g>
+
+  <!-- CASSETTE TAPE DOODLE -->
+  <g transform="translate(140 420) rotate(-4)">
+    <rect x="0" y="0" width="150" height="92" fill="#ff3fa4" stroke="#1a0e22" stroke-width="2.5" rx="6"/>
+    <rect x="10" y="10" width="130" height="30" fill="#fff4e6" stroke="#1a0e22" stroke-width="1.5"/>
+    <text x="75" y="30" text-anchor="middle" font-family="Caveat, cursive" font-size="20" fill="#1a0e22">MIX #7 ♥</text>
+    <circle cx="42" cy="66" r="12" fill="#1a0e22"/>
+    <circle cx="42" cy="66" r="4" fill="#ffe66d"/>
+    <circle cx="108" cy="66" r="12" fill="#1a0e22"/>
+    <circle cx="108" cy="66" r="4" fill="#ffe66d"/>
+    <rect x="42" y="82" width="66" height="6" fill="#1a0e22"/>
+  </g>
+
+  <!-- FRIENDSHIP BRACELET doodle -->
+  <g transform="translate(340 480)">
+    <path d="M0 12 Q 110 -12 220 12" stroke="#1a0e22" stroke-width="1.5" fill="none"/>
+    <g stroke="#1a0e22" stroke-width="1">
+      <circle cx="0" cy="12" r="8" fill="#ff3fa4"/>
+      <circle cx="22" cy="6" r="8" fill="#ffe66d"/>
+      <circle cx="44" cy="1" r="8" fill="#5ec8ff"/>
+      <circle cx="66" cy="-2" r="8" fill="#c6ff3a"/>
+      <circle cx="88" cy="-4" r="8" fill="#ff90c2"/>
+      <circle cx="110" cy="-5" r="8" fill="#8b4cd6"/>
+      <circle cx="132" cy="-4" r="8" fill="#ffe66d"/>
+      <circle cx="154" cy="-2" r="8" fill="#ff3fa4"/>
+      <circle cx="176" cy="1" r="8" fill="#5ec8ff"/>
+      <circle cx="198" cy="6" r="8" fill="#c6ff3a"/>
+      <circle cx="220" cy="12" r="8" fill="#ff90c2"/>
+      <text x="0" y="15" text-anchor="middle" font-family="Archivo Black, Impact, sans-serif" font-size="8" fill="#1a0e22">B</text>
+      <text x="22" y="9" text-anchor="middle" font-family="Archivo Black, Impact, sans-serif" font-size="8" fill="#1a0e22">F</text>
+      <text x="44" y="4" text-anchor="middle" font-family="Archivo Black, Impact, sans-serif" font-size="8" fill="#1a0e22">F</text>
+      <text x="198" y="9" text-anchor="middle" font-family="Archivo Black, Impact, sans-serif" font-size="8" fill="#1a0e22">4</text>
+      <text x="220" y="15" text-anchor="middle" font-family="Archivo Black, Impact, sans-serif" font-size="8" fill="#1a0e22">E</text>
+    </g>
+  </g>
+
+  <!-- "TOUR COUNTDOWN" block bottom right -->
+  <g transform="translate(520 780) rotate(-3)">
+    <rect x="-4" y="-4" width="228" height="88" fill="#1a0e22" opacity="0.12"/>
+    <rect x="0" y="0" width="220" height="80" fill="#ffe66d" stroke="#1a0e22" stroke-width="2"/>
+    <text x="110" y="26" text-anchor="middle" font-family="Archivo Black, Impact, sans-serif" font-style="italic" font-size="18" fill="#e01f88">TOUR COUNTDOWN</text>
+    <text x="110" y="62" text-anchor="middle" font-family="Archivo Black, Impact, sans-serif" font-style="italic" font-size="38" fill="#1a0e22">42 DAYS!</text>
+    <rect x="60" y="-12" width="62" height="16" fill="#5ec8ff" opacity="0.7" transform="rotate(-6)"/>
+  </g>
+
+  <!-- S + J IN A HEART (doodle) -->
+  <g transform="translate(130 820)">
+    <path d="M0 40 C -20 10, 10 -10, 40 10 C 60 -10, 90 10, 70 40 L 35 70 Z" fill="none" stroke="#ff3fa4" stroke-width="4"/>
+    <text x="35" y="38" text-anchor="middle" font-family="Caveat, cursive" font-size="24" fill="#ff3fa4">S + J</text>
+    <text x="35" y="56" text-anchor="middle" font-family="Caveat, cursive" font-size="14" fill="#ff3fa4">4EVR</text>
+    <!-- arrow through -->
+    <line x1="-16" y1="30" x2="90" y2="50" stroke="#1a0e22" stroke-width="2"/>
+    <polygon points="86,44 100,52 86,58" fill="#1a0e22"/>
+    <path d="M-14 30 L-22 24 L-18 34 Z" fill="#1a0e22"/>
+  </g>
+
+  <!-- CORNER DOODLES and stickers -->
+  <g>
+    <!-- Star doodles -->
+    <g stroke="#1a0e22" stroke-width="1.5">
+      <path d="M290 150 L294 162 L306 164 L296 172 L300 184 L290 176 L280 184 L284 172 L274 164 L286 162 Z" fill="#ffe66d"/>
+      <path d="M350 100 L352 108 L360 110 L354 116 L356 124 L350 120 L344 124 L346 116 L340 110 L348 108 Z" fill="#ff3fa4"/>
+      <path d="M720 820 L724 832 L736 834 L726 842 L730 854 L720 846 L710 854 L714 842 L704 834 L716 832 Z" fill="#c6ff3a"/>
+    </g>
+    <!-- Spiral flower doodles -->
+    <g stroke="#1a0e22" stroke-width="1.5" fill="none">
+      <g transform="translate(700 900)">
+        <circle cx="0" cy="0" r="6" fill="#ffe66d"/>
+        <circle cx="-12" cy="-4" r="8" fill="#ff3fa4"/>
+        <circle cx="-4" cy="-14" r="8" fill="#ff3fa4"/>
+        <circle cx="10" cy="-10" r="8" fill="#ff3fa4"/>
+        <circle cx="12" cy="4" r="8" fill="#ff3fa4"/>
+        <circle cx="2" cy="12" r="8" fill="#ff3fa4"/>
+        <circle cx="-12" cy="10" r="8" fill="#ff3fa4"/>
+        <circle cx="0" cy="0" r="6" fill="#ffe66d"/>
+      </g>
+    </g>
+    <!-- Smiley corner sticker top-right -->
+    <g transform="translate(740 60)">
+      <circle cx="0" cy="0" r="22" fill="#ffe66d" stroke="#1a0e22" stroke-width="2"/>
+      <circle cx="-8" cy="-4" r="2" fill="#1a0e22"/>
+      <circle cx="8" cy="-4" r="2" fill="#1a0e22"/>
+      <path d="M-10 8 Q 0 16 10 8" stroke="#1a0e22" stroke-width="2" fill="none"/>
+    </g>
+    <!-- Hearts scattered -->
+    <g stroke="#1a0e22" stroke-width="1.5">
+      <path d="M500 700 C 492 692 494 680 504 680 C 508 680 510 684 510 688 C 510 684 512 680 516 680 C 526 680 528 692 520 700 L 510 710 Z" fill="#ff90c2"/>
+      <path d="M230 700 C 222 692 224 680 234 680 C 238 680 240 684 240 688 C 240 684 242 680 246 680 C 256 680 258 692 250 700 L 240 710 Z" fill="#ff3fa4"/>
+      <path d="M690 400 C 682 392 684 380 694 380 C 698 380 700 384 700 388 C 700 384 702 380 706 380 C 716 380 718 392 710 400 L 700 410 Z" fill="#ff90c2"/>
+    </g>
+  </g>
+
+  <!-- DOG-EARED CORNER (bottom-right) -->
+  <g transform="translate(720 920)">
+    <polygon points="0,80 80,0 80,80" fill="url(#dogEar)" stroke="#1a0e22" stroke-width="1.5"/>
+    <polygon points="0,80 80,0 80,80" fill="#c8a24a" opacity="0.2"/>
+  </g>
+
+  <!-- Sign off at very bottom -->
+  <text x="140" y="976" font-family="Caveat, cursive" font-size="38" fill="#1a0e22" transform="rotate(-2 140 976)">♥ BFF 4EVR ~ xoxo ♥</text>
+</svg>

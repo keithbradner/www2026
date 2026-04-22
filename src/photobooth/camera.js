@@ -10,20 +10,66 @@ const CAPTURE_ASPECT = 4 / 5
 const IDEAL_WIDTH = 1440
 const IDEAL_HEIGHT = 1800
 
-export async function initCamera() {
+const BASE_VIDEO_CONSTRAINTS = {
+    width: { ideal: IDEAL_WIDTH },
+    height: { ideal: IDEAL_HEIGHT },
+    aspectRatio: { ideal: CAPTURE_ASPECT },
+    facingMode: 'user'
+}
+
+// focusMode/exposureMode/whiteBalanceMode are non-standard on most desktop
+// cameras; try with them first, fall back without them on OverconstrainedError.
+const ADVANCED_VIDEO_CONSTRAINTS = {
+    ...BASE_VIDEO_CONSTRAINTS,
+    focusMode: 'continuous',
+    exposureMode: 'continuous',
+    whiteBalanceMode: 'continuous'
+}
+
+async function requestCamera() {
     try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-            video: {
-                width: { ideal: IDEAL_WIDTH },
-                height: { ideal: IDEAL_HEIGHT },
-                aspectRatio: { ideal: CAPTURE_ASPECT },
-                facingMode: 'user',
-                focusMode: 'continuous',
-                exposureMode: 'continuous',
-                whiteBalanceMode: 'continuous'
-            },
+        return await navigator.mediaDevices.getUserMedia({
+            video: ADVANCED_VIDEO_CONSTRAINTS,
             audio: false
         })
+    } catch (err) {
+        if (err && err.name === 'OverconstrainedError') {
+            console.warn('Advanced camera constraints rejected, retrying with base constraints:', err)
+            return await navigator.mediaDevices.getUserMedia({
+                video: BASE_VIDEO_CONSTRAINTS,
+                audio: false
+            })
+        }
+        throw err
+    }
+}
+
+function describeCameraError(err) {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        return 'Camera not available. This page must be loaded over https:// or localhost.'
+    }
+    if (!window.isSecureContext) {
+        return 'Insecure context: camera requires https:// or localhost.'
+    }
+    switch (err && err.name) {
+        case 'NotAllowedError':
+        case 'SecurityError':
+            return 'Camera access denied. Enable camera permission for this site in your browser.'
+        case 'NotFoundError':
+        case 'OverconstrainedError':
+            return 'No compatible camera found on this device.'
+        case 'NotReadableError':
+            return 'Camera is in use by another app. Close Zoom/Teams/etc. and reload.'
+        case 'AbortError':
+            return 'Camera start aborted. Reload the page to try again.'
+        default:
+            return `Camera error: ${(err && (err.message || err.name)) || 'unknown'}`
+    }
+}
+
+export async function initCamera() {
+    try {
+        const stream = await requestCamera()
         state.videoStream = stream
         state.elements.video.srcObject = stream
         await state.elements.video.play()
@@ -36,7 +82,7 @@ export async function initCamera() {
         state.elements.captureBtn.disabled = false
     } catch (err) {
         console.error('Camera error:', err)
-        state.elements.cameraLoading.textContent = 'Camera access denied. Please enable camera permissions.'
+        state.elements.cameraLoading.textContent = describeCameraError(err)
     }
 }
 
