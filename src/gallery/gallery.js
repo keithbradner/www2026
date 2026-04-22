@@ -11,8 +11,19 @@ const noticeEl = document.getElementById('gallery-notice')
 const lightboxEl = document.getElementById('lightbox')
 const lightboxImg = document.getElementById('lightbox-img')
 const lightboxClose = document.getElementById('lightbox-close')
+const btnSave = document.getElementById('btn-save')
+const btnShare = document.getElementById('btn-share')
 
 const knownIds = new Set()
+let currentPhotoId = null
+
+// Web Share API exists on iOS Safari 15+, Android Chrome, and recent
+// desktop Chromium/Edge. If the browser lacks it entirely, hide the
+// button — no reasonable fallback that isn't just a duplicate of Save.
+if ('share' in navigator) btnShare.hidden = false
+
+btnSave.addEventListener('click', onSave)
+btnShare.addEventListener('click', onShare)
 
 const autoOpenId = new URLSearchParams(window.location.search).get('photo')
 if (autoOpenId) autoOpenFromUrl(autoOpenId)
@@ -95,6 +106,7 @@ function buildTile(id, idx) {
 }
 
 function openLightbox(id) {
+    currentPhotoId = id
     lightboxImg.src = imageUrl(id)
     lightboxEl.classList.remove('hidden')
     logView(id)
@@ -102,11 +114,83 @@ function openLightbox(id) {
 
 function closeLightbox() {
     lightboxEl.classList.add('hidden')
+    currentPhotoId = null
 }
 
 async function logView(id) {
     try { await fetch(`/api/photos/${id}/log-view`, { method: 'POST' }) }
     catch {}
+}
+
+async function logDownload(id) {
+    try { await fetch(`/api/photos/${id}/log-download`, { method: 'POST' }) }
+    catch {}
+}
+
+// iPadOS reports as Mac; the touchpoints check catches the iPad case so we
+// still fall into the Safari-friendly save path.
+function isIOS() {
+    const ua = navigator.userAgent
+    return /iPad|iPhone|iPod/.test(ua) ||
+           (/Mac/.test(ua) && navigator.maxTouchPoints > 1)
+}
+
+function onSave() {
+    if (!currentPhotoId) return
+    const id = currentPhotoId
+    logDownload(id)
+
+    if (isIOS()) {
+        // iOS Safari ignores <a download> and opening a new tab yanks the
+        // user away before they see any hint. The lightbox image is already
+        // full-size on screen and long-pressable by default, so just point
+        // them at it.
+        showNotice('Long-press the photo and tap "Save to Photos"')
+        return
+    }
+
+    const a = document.createElement('a')
+    a.href = imageUrl(id)
+    a.download = `wwww-${id}.jpg`
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+    showNotice('Saved to your downloads.')
+}
+
+async function onShare() {
+    if (!currentPhotoId) return
+    const id = currentPhotoId
+    try {
+        const res = await fetch(imageUrl(id))
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        const blob = await res.blob()
+        const file = new File([blob], `wwww-${id}.jpg`, {
+            type: blob.type || 'image/jpeg'
+        })
+        const data = {
+            files: [file],
+            title: 'What Women Want 2026',
+            text: 'From the photobooth ✨'
+        }
+        if (navigator.canShare && navigator.canShare(data)) {
+            await navigator.share(data)
+            logDownload(id)
+            return
+        }
+        // No file-share support — share the gallery URL instead so the
+        // recipient can open the same photo in the lightbox.
+        const shareUrl = `${location.origin}/gallery?photo=${id}`
+        if (navigator.share) {
+            await navigator.share({ title: 'What Women Want 2026', url: shareUrl })
+            return
+        }
+        showNotice("Sharing isn't supported — use Save instead.")
+    } catch (err) {
+        if (err.name === 'AbortError') return
+        console.error(err)
+        showNotice('Share failed. Try again or use Save.')
+    }
 }
 
 function showNotice(text) {
