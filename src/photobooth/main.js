@@ -30,6 +30,7 @@ setElements({
     stickersLayer: document.getElementById('stickers-layer'),
     editorProcessing: document.getElementById('editor-processing'),
     editorProcessingText: document.getElementById('editor-processing-text'),
+    btnRetake: document.getElementById('btn-retake'),
     btnReset: document.getElementById('btn-reset'),
     btnDone: document.getElementById('btn-done'),
     panels: {
@@ -62,6 +63,11 @@ async function onCaptureDone(capturedCanvas) {
     showPanel('editor')
     await initEditor({ capturedCanvas })
 }
+
+state.elements.btnRetake.addEventListener('click', () => {
+    showPanel('camera')
+    initCamera()
+})
 
 state.elements.btnDone.addEventListener('click', async () => {
     state.elements.btnDone.disabled = true

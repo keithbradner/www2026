@@ -20,6 +20,11 @@
       <div class="camera-starburst"></div>
     </div>
 
+    <div class="look-here" aria-hidden="true">
+      <div class="look-here-arrow">↑</div>
+      <div class="look-here-text">Look here!</div>
+    </div>
+
     <div class="camera-shell">
       <header class="camera-header">
         <div class="marquee-strip">
@@ -53,9 +58,15 @@
 
   <!-- EDITOR -->
   <section class="panel panel-editor hidden" id="panel-editor">
-    <div class="editor-stage">
-      <canvas id="editor-canvas"></canvas>
-      <div class="stickers-layer" id="stickers-layer"></div>
+    <div class="editor-photo-group">
+      <div class="editor-stage">
+        <canvas id="editor-canvas"></canvas>
+        <div class="stickers-layer" id="stickers-layer"></div>
+      </div>
+
+      <div class="editor-retake">
+        <button class="btn-secondary" id="btn-retake">← Retake Photo</button>
+      </div>
     </div>
 
     <div class="editor-toolbar">
@@ -72,11 +83,11 @@
         <div class="tool-panel" data-panel="frames" id="panel-frames"></div>
         <div class="tool-panel" data-panel="stickers" id="panel-stickers"></div>
       </div>
+    </div>
 
-      <div class="editor-actions">
-        <button class="btn-secondary" id="btn-reset">Reset</button>
-        <button class="btn-primary" id="btn-done">Done →</button>
-      </div>
+    <div class="editor-actions">
+      <button class="btn-secondary" id="btn-reset">Reset</button>
+      <button class="btn-primary" id="btn-done">Done →</button>
     </div>
 
     <div class="editor-processing hidden" id="editor-processing">
