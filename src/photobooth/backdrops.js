@@ -7,14 +7,16 @@
 import { segment } from './segmentation.js'
 
 export const BACKDROP_LIBRARY = [
-    { id: 'none',    label: 'Original',      src: null },
-    { id: 'stage',   label: 'Concert Stage', src: '/backdrops/concert-stage.svg' },
-    { id: 'trl',     label: 'TRL Studio',    src: '/backdrops/trl-studio.svg' },
-    { id: 'bedroom', label: 'Teen Bedroom',  src: '/backdrops/teen-bedroom.svg' },
-    { id: 'mall',    label: 'Mall',          src: '/backdrops/mall.svg' },
-    { id: 'limo',    label: 'Limo',          src: '/backdrops/limo.svg' },
-    { id: 'coshocton', label: 'Coshocton',   src: '/backdrops/coshocton.svg' },
-    { id: 'diary',     label: 'Dear Diary',  src: '/backdrops/diary-page.svg' }
+    { id: 'none',          label: 'Original',          src: null },
+    { id: 'patches',       label: 'Boy Band Patches',  src: '/backdrops/boy-band-patches.jpg' },
+    { id: 'graffiti',      label: 'Graffiti Wall',     src: '/backdrops/graffiti-wall.jpg' },
+    { id: 'may',           label: "It's Gonna Be May", src: '/backdrops/its-gonna-be-may.jpg' },
+    { id: 'neon-squiggles', label: 'Neon Squiggles',   src: '/backdrops/neon-squiggles.jpg' },
+    { id: 'doodles',       label: '90s Doodles',       src: '/backdrops/90s-doodles.jpg' },
+    { id: 'memphis-floor', label: 'Memphis Floor',     src: '/backdrops/memphis-floor.jpg' },
+    { id: 'terrazzo',      label: 'Terrazzo',          src: '/backdrops/terrazzo.jpg' },
+    { id: 'memphis-grid',  label: 'Memphis Grid',      src: '/backdrops/memphis-grid.jpg' },
+    { id: 'purple-memphis', label: 'Purple Memphis',   src: '/backdrops/purple-memphis.jpg' }
 ]
 
 export function renderBackdropPicker(panelEl, onSelect, currentId) {
