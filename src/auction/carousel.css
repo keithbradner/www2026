@@ -64,7 +64,7 @@ body.page-auction {
   letter-spacing: 0.01em;
   transform-origin: center;
 }
-.scribble-1 { top: 6%; right: 10%; transform: rotate(8deg); font-size: 28px; color: var(--purple); }
+.scribble-1 { top: 1%; right: 10%; transform: rotate(8deg); font-size: 28px; color: var(--purple); }
 .scribble-2 { top: 46%; right: 3%; transform: rotate(-18deg); font-size: 32px; }
 .scribble-3 { bottom: 14%; left: 6%; transform: rotate(-8deg); font-size: 28px; color: var(--cyan-deep); }
 

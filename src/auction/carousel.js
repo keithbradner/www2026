@@ -157,7 +157,17 @@ function renderItem(item, { instant } = {}) {
     // Meta
     titleEl.textContent = item.title || ''
     taglineEl.textContent = item.tagline || ''
-    descriptionEl.textContent = item.description || ''
+    descriptionEl.innerHTML = formatDescription(item.description || '')
+}
+
+function formatDescription(text) {
+    const escaped = text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+    return escaped.replace(/\*\*([^*]+?)\*\*/g, '<strong>$1</strong>')
 }
 
 function goTo(next) {
