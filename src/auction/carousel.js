@@ -90,9 +90,40 @@ function updatePager() {
     })
 }
 
-const SLOT_CAPTIONS = ['dream ♥', 'yes pls', 'omg', 'BFF']
+const CAPTION_POOL = [
+    'dream ♥', 'yes pls', 'omg!', 'BFF',
+    'fave', 'crush', 'WIN ME', 'no. 1',
+    '★ VIP ★', 'mine!', 'obsessed', 'iconic',
+    'goals', 'so cute', 'hot!', 'mixtape',
+    'backstage', 'fan club', 'pick me', 'must have',
+    '♥♥♥', 'squee!', 'poster', 'SWOON',
+    'heart-throb', 'wanted', 'cutie', 'dreamy'
+]
+
+// Stable per-item picks: each item's id hashes to its own four captions so
+// reloads and admin re-orders don't reshuffle the stickers.
+function captionsFor(id) {
+    const pool = CAPTION_POOL.slice()
+    let seed = fnv1a(String(id || ''))
+    const picks = []
+    for (let i = 0; i < 4 && pool.length; i++) {
+        seed = (Math.imul(seed, 16807) + 1) >>> 0
+        picks.push(pool.splice(seed % pool.length, 1)[0])
+    }
+    return picks
+}
+
+function fnv1a(s) {
+    let h = 2166136261
+    for (let i = 0; i < s.length; i++) {
+        h ^= s.charCodeAt(i)
+        h = Math.imul(h, 16777619)
+    }
+    return h >>> 0
+}
 
 function renderItem(item, { instant } = {}) {
+    const captions = captionsFor(item.id)
     // Slot images
     for (let slot = 1; slot <= 4; slot++) {
         const el = slotEls[slot]
@@ -112,7 +143,7 @@ function renderItem(item, { instant } = {}) {
 
             const caption = document.createElement('div')
             caption.className = 'slot-caption'
-            caption.textContent = SLOT_CAPTIONS[slot - 1] || ''
+            caption.textContent = captions[slot - 1] || ''
             el.appendChild(caption)
         } else {
             el.classList.add('placeholder')
