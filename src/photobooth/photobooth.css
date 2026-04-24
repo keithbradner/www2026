@@ -140,9 +140,20 @@
   line-height: 0.9;
   letter-spacing: 0.02em;
   margin: 0;
+  /* Italic slant overhangs right; drop-shadow extends below the line box.
+     Pad so neither gets clipped by the marquee above or preview rings below. */
+  padding: 0.1em 0.2em 0.22em;
   text-transform: uppercase;
 }
 .camera-title .chrome-text {
+  /* Inline-block + horizontal padding extends the gradient-fill area past
+     the italic overhang so the tilted "!" dot doesn't fall outside the
+     background-clip:text painting box and show the dark page through.
+     Negative margin cancels the padding for layout so the title still
+     fits on one line. */
+  display: inline-block;
+  padding: 0.05em 0.22em;
+  margin: 0 -0.22em;
   filter: drop-shadow(0 6px 0 var(--hot-deep))
           drop-shadow(0 10px 20px rgba(255, 63, 164, 0.45));
 }
@@ -182,7 +193,7 @@
   position: absolute;
   top: -22px;
   left: -28px;
-  z-index: 5;
+  z-index: 100;
   background: linear-gradient(135deg, var(--hot) 0%, var(--hot-deep) 100%);
   color: #fff;
   font-family: var(--font-tabloid);
@@ -313,7 +324,7 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-4);
-  z-index: 20;
+  z-index: 9;
   color: #fff;
 }
 .capture-processing-text {
@@ -595,7 +606,7 @@
   justify-content: center;
   gap: var(--space-4);
   background: rgba(10, 6, 20, 0.85);
-  z-index: 20;
+  z-index: 9;
   color: #fff;
 }
 #editor-processing-text {

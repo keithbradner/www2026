@@ -28,13 +28,11 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   box-shadow:
-    0 0 0 3px var(--ink),
-    0 0 0 7px var(--hot),
     0 16px 36px -8px var(--shadow-strong),
     inset 0 0 0 1px rgba(26, 14, 34, 0.08);
   transition: transform var(--dur-fast) var(--ease-out),
               box-shadow var(--dur-fast) var(--ease-out);
-  overflow: hidden;
+  overflow: visible;
 }
 .top-nav .nav-btn {
   touch-action: none;
@@ -43,9 +41,8 @@
 .top-nav .nav-btn:hover {
   transform: translateY(-3px) rotate(-1deg);
   box-shadow:
-    0 0 0 3px var(--ink),
-    0 0 0 7px var(--hot),
-    0 22px 44px -8px var(--shadow-strong);
+    0 22px 44px -8px var(--shadow-strong),
+    inset 0 0 0 1px rgba(26, 14, 34, 0.08);
 }
 .top-nav .nav-btn:active { transform: translateY(0) rotate(0); }
 .top-nav .nav-btn.is-dragging {
@@ -109,24 +106,58 @@
   letter-spacing: 0.04em;
 }
 
-/* Holographic stripe at the bottom */
-.pass-holo {
+/* Bottom holo stripe is replaced by the rainbow border ring (see ::before) */
+.pass-holo { display: none; }
+
+/* Photobooth page: rely on the rainbow ring; deeper drop shadow on dark bg */
+.page-photobooth .top-nav .nav-btn {
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.6),
+    inset 0 0 0 1px rgba(26, 14, 34, 0.08);
+}
+
+/* Animated rainbow border ring */
+.top-nav .nav-btn::before {
+  content: '';
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 10px;
+  inset: -10px;
+  border-radius: 24px;
+  padding: 10px;
   background: linear-gradient(90deg,
     #ff3fa4 0%, #ff90c2 18%, #ffe66d 36%, #c6ff3a 54%, #5ec8ff 72%, #8b4cd6 90%, #ff3fa4 100%);
   background-size: 200% 100%;
-  animation: hologram 5s linear infinite;
-  border-top: 2px solid var(--ink);
+  animation: hologram 3s linear infinite;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  z-index: -1;
+  filter:
+    drop-shadow(0 0 10px rgba(255, 63, 164, 0.65))
+    drop-shadow(0 0 22px rgba(94, 200, 255, 0.4));
 }
 
-/* Photobooth page: same pass look but drop shadow on dark bg is fine */
-.page-photobooth .top-nav .nav-btn {
-  box-shadow:
-    0 0 0 3px var(--ink),
-    0 0 0 7px var(--hot),
-    0 18px 40px rgba(0, 0, 0, 0.6);
+/* Soft pulsing halo */
+.top-nav .nav-btn::after {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  border-radius: 30px;
+  background: radial-gradient(closest-side, rgba(255, 63, 164, 0.55), transparent 70%);
+  filter: blur(10px);
+  pointer-events: none;
+  z-index: -2;
+  animation: pb-halo 2.4s ease-in-out infinite;
+}
+
+@keyframes pb-halo {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50%     { opacity: 1;    transform: scale(1.1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .top-nav .nav-btn::before { animation: none; }
+  .top-nav .nav-btn::after  { animation: none; opacity: 0.7; }
 }
