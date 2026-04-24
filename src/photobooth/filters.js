@@ -4,7 +4,7 @@
  */
 
 export const FILTERS = [
-    { id: 'none',        label: 'The Real Me',   css: 'none' },
+    { id: 'none',        label: 'No Filter',     css: 'none', icon: true },
     { id: 'glam',        label: 'Spotlight ⭐',  css: 'contrast(1.25) saturate(1.4) brightness(1.12)' },
     { id: 'airbrush',    label: 'Airbrush',      css: 'contrast(0.85) saturate(1.55) brightness(1.18) blur(0.7px)' },
     { id: 'glitter',     label: 'Glitter Bomb',  css: 'contrast(1.4) saturate(2) brightness(1.15) hue-rotate(-10deg)' },

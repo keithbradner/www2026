@@ -16,7 +16,7 @@
 
 /* ======================== CAMERA PANEL ======================== */
 .panel-camera {
-  padding: 180px var(--space-5) var(--space-6);
+  padding: 220px var(--space-5) var(--space-6);
   color: #fff;
   overflow: hidden;
   justify-content: flex-start;
@@ -33,27 +33,34 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
   pointer-events: none;
   color: var(--highlighter);
   font-family: var(--font-hand);
   font-weight: 700;
-  font-size: 30px;
-  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.55);
+  font-size: 44px;
+  text-shadow: 0 3px 0 rgba(0, 0, 0, 0.55);
 }
 .look-here-arrow {
-  font-size: 56px;
+  font-size: 88px;
   line-height: 0.7;
   color: var(--hot);
-  text-shadow: 0 2px 0 var(--ink), 0 4px 12px rgba(255, 63, 164, 0.5);
+  text-shadow: 0 3px 0 var(--ink), 0 6px 16px rgba(255, 63, 164, 0.55);
   animation: look-here-bounce 1.1s var(--ease-out) infinite;
 }
 .look-here-text {
-  transform: rotate(-4deg);
+  transform-origin: center bottom;
+  animation: look-here-dance 1.6s var(--ease-out) infinite;
 }
 @keyframes look-here-bounce {
   0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-8px); }
+  50%      { transform: translateY(-10px); }
+}
+@keyframes look-here-dance {
+  0%, 100% { transform: rotate(-6deg) scale(1); }
+  25%      { transform: rotate(1deg)  scale(1.04); }
+  50%      { transform: rotate(5deg)  scale(1); }
+  75%      { transform: rotate(1deg)  scale(1.04); }
 }
 
 .camera-bg {
@@ -346,11 +353,11 @@
 /* ======================== EDITOR PANEL ======================== */
 .panel-editor {
   display: grid;
-  /* Center the whole stack — photo+retake, toolbar, actions — vertically on
-     the panel, with slack split evenly above and below. */
-  grid-template-rows: auto auto auto;
+  /* Photo area on top takes whatever it needs; rows dock to the bottom at
+     their natural height. align-content:center only kicks in if there's
+     extra slack, so on tall viewports the block stays centered. */
+  grid-template-rows: 1fr auto;
   grid-template-columns: minmax(0, 1fr);
-  align-content: center;
   padding: 0;
   background: linear-gradient(180deg, #2a1a38 0%, #0a0614 100%);
   overflow: hidden;
@@ -362,13 +369,23 @@
   align-items: center;
   justify-content: center;
   min-height: 0;
-  padding: var(--space-3) var(--space-3) 160px;
+  padding: var(--space-3) var(--space-3) 0;
+}
+
+/* fit-content column so the Retake/Done row directly below the photo
+   aligns its ends to the photo's left and right edges regardless of
+   viewport size. */
+.editor-photo-col {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  max-width: 100%;
   gap: var(--space-5);
+  min-height: 0;
 }
 
 .editor-stage {
   position: relative;
-  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -380,10 +397,10 @@
   width: auto;
   height: auto;
   max-width: 100%;
-  /* Toolbar + actions + retake + spacer + padding = ~420px chrome below the
-     photo, so cap the canvas height here and let aspect-ratio + max-width
-     pick the final size. */
-  max-height: calc(100dvh - 420px);
+  /* Retake/Done row + 4 editor-rows + padding (including the lift that keeps
+     rows clear of the Reset All button) + gaps = ~608px chrome below the
+     photo. */
+  max-height: calc(100dvh - 608px);
   aspect-ratio: 4 / 5;
   object-fit: contain;
   border-radius: 8px;
@@ -393,6 +410,18 @@
     0 0 0 11px var(--hot),
     0 20px 60px rgba(0, 0, 0, 0.6);
   background: #000;
+}
+
+.editor-photo-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+  flex: 0 0 auto;
+}
+.editor-photo-actions .btn-secondary {
+  background: linear-gradient(180deg, var(--chrome-0), var(--chrome-1));
+  color: var(--ink);
 }
 
 .stickers-layer {
@@ -464,135 +493,138 @@
   color: var(--ink);
 }
 
-/* ---- Toolbar ---- */
-.editor-retake {
+/* ---- Editing rows ---- */
+.editor-rows {
   display: flex;
-  justify-content: center;
-  flex: 0 0 auto;
-}
-.editor-retake .btn-secondary {
-  background: linear-gradient(180deg, var(--chrome-0), var(--chrome-1));
-  color: var(--ink);
+  flex-direction: column;
+  gap: var(--space-4);
+  /* Extra bottom padding lifts the rows up off the viewport bottom and
+     clears the floating Reset All button (~44px high + 16px offset), so
+     the sticker row doesn't sit under it. */
+  padding: var(--space-2) var(--space-4) 120px;
+  background: linear-gradient(180deg, #180a28 0%, #0c0518 100%);
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  box-shadow: inset 0 1px 0 rgba(255, 63, 164, 0.12);
 }
 
-.editor-toolbar {
-  background: #14081f;
-  padding: var(--space-3) var(--space-4) var(--space-3);
-  min-width: 0;
-  overflow: hidden;
-}
-.tool-tabs {
+.editor-row {
   display: flex;
-  align-items: flex-end;
-  gap: 4px;
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  max-width: 100%;
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.tool-tabs::-webkit-scrollbar { display: none; }
-.tool-tab {
-  flex: 1 1 0;
+  align-items: center;
+  gap: var(--space-4);
   min-width: 0;
-  padding: 10px 14px;
-  background: linear-gradient(180deg, #3e2059 0%, #2a1340 100%);
+}
+/* Fixed-width label cell wide enough for the longest title ("BACKDROPS")
+   at the chosen display size, so every row's content column starts at the
+   same x — reads as a table. */
+.editor-row-label {
+  flex: 0 0 136px;
+  display: flex;
+  align-items: center;
+  padding-left: 4px;
+}
+.editor-row-label > span {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 17px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
   color: #fff;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+  line-height: 1;
+}
+
+.tool-panel {
+  flex: 1 1 auto;
+  display: flex;
+  gap: 10px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 4px 2px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--hot) transparent;
+  min-width: 0;
+  -webkit-overflow-scrolling: touch;
+}
+.tool-panel::-webkit-scrollbar { height: 6px; }
+.tool-panel::-webkit-scrollbar-thumb { background: var(--hot); border-radius: 999px; }
+/* Floating Reset All button — absolute in the .panel-editor (fixed inset:0),
+   so it sits in the viewport's bottom-left corner. Reverts all edits and
+   returns the canvas to the raw captured photo. */
+.btn-editor-reset {
+  position: absolute;
+  bottom: var(--space-4);
+  left: var(--space-4);
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-family: var(--font-display);
   font-style: italic;
   font-size: 14px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  white-space: nowrap;
-  border: 1.5px solid rgba(255, 255, 255, 0.38);
-  border-bottom: none;
-  border-radius: 12px 12px 0 0;
-  position: relative;
-  z-index: 2;
-  transition: background var(--dur-fast) var(--ease-out),
-              color var(--dur-fast) var(--ease-out),
-              transform var(--dur-fast) var(--ease-out);
+  color: var(--ink);
+  background: linear-gradient(180deg, var(--chrome-0), var(--chrome-1));
+  padding: 10px 20px;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.12);
+  transition: transform var(--dur-fast) var(--ease-out),
+              filter var(--dur-fast) var(--ease-out);
 }
-.tool-tab:hover:not(.active) {
-  background: linear-gradient(180deg, #52296f 0%, #3a1d54 100%);
-  border-color: rgba(255, 255, 255, 0.55);
-  color: #fff;
+.btn-editor-reset:hover {
   transform: translateY(-1px);
+  filter: brightness(1.05);
 }
-.tool-tab.active {
-  background: var(--hot);
-  border-color: var(--hot);
-  color: #fff;
-  padding-top: 12px;
-  padding-bottom: 16px;
-  z-index: 2;
-  box-shadow: 0 -4px 12px rgba(255, 63, 164, 0.35),
-              0 6px 14px -2px rgba(255, 63, 164, 0.55);
+.btn-editor-reset:active { transform: translateY(0); }
+.btn-editor-reset .reset-icon {
+  display: inline-block;
+  font-size: 18px;
+  line-height: 1;
+  transition: transform 400ms var(--ease-out);
 }
-
-.tool-panels {
-  /* Fixed height so the editor-actions row can't get pushed off the viewport
-     when a panel (e.g. stickers) has lots of items. The gradient + inner glow
-     make the active tab's color bleed down into the content so the tab and
-     its panel read as a single shape. */
-  height: 104px;
-  overflow: hidden;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 63, 164, 0.45) 0%,
-    rgba(255, 63, 164, 0.14) 35%,
-    rgba(255, 63, 164, 0.05) 100%
-  );
-  border: 1.5px solid var(--hot);
-  border-radius: 12px;
-  margin-top: -1.5px;
-  box-sizing: border-box;
-  position: relative;
-  z-index: 1;
-  box-shadow: inset 0 10px 18px -8px rgba(255, 63, 164, 0.55);
+.btn-editor-reset:hover .reset-icon {
+  transform: rotate(-180deg);
 }
-.tool-panel {
-  display: none;
-  gap: 10px;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: var(--space-2) 0 var(--space-3);
-  scrollbar-width: thin;
-  scrollbar-color: var(--hot) transparent;
-  height: 100%;
-  -webkit-overflow-scrolling: touch;
-}
-.tool-panel::-webkit-scrollbar { height: 6px; }
-.tool-panel::-webkit-scrollbar-thumb { background: var(--hot); border-radius: 999px; }
-.tool-panel.active { display: flex; }
 
 .tool-item {
   flex: 0 0 auto;
-  width: 76px;
-  height: 94px;
+  width: 78px;
+  height: 96px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
   padding: 6px;
-  border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
   color: #fff;
   transition: background var(--dur-fast) var(--ease-out),
-              transform var(--dur-fast) var(--ease-out);
-  border: 2px solid transparent;
+              transform var(--dur-fast) var(--ease-out),
+              box-shadow var(--dur-fast) var(--ease-out);
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 }
-.tool-item:hover { background: rgba(255, 255, 255, 0.14); }
+.tool-item:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
 .tool-item:active { transform: scale(0.96); }
 .tool-item.active {
   background: var(--hot);
-  border-color: var(--ink);
-  box-shadow: 3px 3px 0 var(--purple-deep);
+  border-color: var(--highlighter);
+  box-shadow:
+    0 0 0 2px var(--ink),
+    0 6px 14px -2px rgba(255, 63, 164, 0.6);
+  transform: translateY(-1px);
 }
 .tool-item .swatch {
   width: 100%;
@@ -606,6 +638,22 @@
 }
 .tool-item .swatch img { width: 100%; height: 100%; object-fit: cover; }
 .tool-item .swatch.icon-only img { object-fit: contain; width: 78%; height: 78%; }
+/* "No Filter" swatch: inline SVG icon on a muted plum tile instead of the
+   pink-gold gradient the color filters share. */
+.tool-item .swatch.swatch-icon {
+  background: linear-gradient(135deg, #3a1e48 0%, #180a2a 100%);
+  color: rgba(255, 255, 255, 0.9);
+  padding: 10px;
+}
+.tool-item .swatch.swatch-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.tool-item.active .swatch.swatch-icon {
+  background: linear-gradient(135deg, #ff6cc0 0%, var(--hot-deep) 100%);
+  color: #fff;
+}
 .tool-item .label {
   font-family: var(--font-tabloid);
   font-size: 12px;
@@ -614,18 +662,6 @@
   text-align: center;
   line-height: 1.1;
   color: #fff;
-}
-
-.editor-actions {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: var(--space-4);
-  padding: var(--space-3) var(--space-4);
-}
-.editor-actions .btn-secondary {
-  background: linear-gradient(180deg, var(--chrome-0), var(--chrome-1));
-  color: var(--ink);
 }
 
 .editor-processing {

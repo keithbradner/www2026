@@ -59,36 +59,41 @@
   <!-- EDITOR -->
   <section class="panel panel-editor hidden" id="panel-editor">
     <div class="editor-photo-group">
-      <div class="editor-stage">
-        <canvas id="editor-canvas"></canvas>
-        <div class="stickers-layer" id="stickers-layer"></div>
-      </div>
-
-      <div class="editor-retake">
-        <button class="btn-secondary" id="btn-retake">← Retake Photo</button>
-      </div>
-    </div>
-
-    <div class="editor-toolbar">
-      <div class="tool-tabs">
-        <button class="tool-tab active" data-tab="filters">Filters</button>
-        <button class="tool-tab" data-tab="backdrops">Backdrops</button>
-        <button class="tool-tab" data-tab="frames">Frames</button>
-        <button class="tool-tab" data-tab="stickers">Stickers</button>
-      </div>
-
-      <div class="tool-panels">
-        <div class="tool-panel active" data-panel="filters" id="panel-filters"></div>
-        <div class="tool-panel" data-panel="backdrops" id="panel-backdrops"></div>
-        <div class="tool-panel" data-panel="frames" id="panel-frames"></div>
-        <div class="tool-panel" data-panel="stickers" id="panel-stickers"></div>
+      <div class="editor-photo-col">
+        <div class="editor-stage">
+          <canvas id="editor-canvas"></canvas>
+          <div class="stickers-layer" id="stickers-layer"></div>
+        </div>
+        <div class="editor-photo-actions">
+          <button class="btn-secondary" id="btn-retake">← Retake Photo</button>
+          <button class="btn-primary" id="btn-done">Done →</button>
+        </div>
       </div>
     </div>
 
-    <div class="editor-actions">
-      <button class="btn-secondary" id="btn-reset">Reset</button>
-      <button class="btn-primary" id="btn-done">Done →</button>
+    <div class="editor-rows">
+      <section class="editor-row">
+        <div class="editor-row-label"><span>Filters</span></div>
+        <div class="tool-panel" id="panel-filters"></div>
+      </section>
+      <section class="editor-row">
+        <div class="editor-row-label"><span>Backdrops</span></div>
+        <div class="tool-panel" id="panel-backdrops"></div>
+      </section>
+      <section class="editor-row">
+        <div class="editor-row-label"><span>Frames</span></div>
+        <div class="tool-panel" id="panel-frames"></div>
+      </section>
+      <section class="editor-row">
+        <div class="editor-row-label"><span>Stickers</span></div>
+        <div class="tool-panel" id="panel-stickers"></div>
+      </section>
     </div>
+
+    <button class="btn-editor-reset" id="btn-reset" type="button">
+      <span class="reset-icon" aria-hidden="true">↺</span>
+      <span>Reset All</span>
+    </button>
 
     <div class="editor-processing hidden" id="editor-processing">
       <div class="spinner"></div>

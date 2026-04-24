@@ -67,7 +67,6 @@ export async function initEditor({ capturedCanvas }) {
     renderBackdropPicker(state.elements.panels.backdrops, onBackdropChange, 'none')
     renderStickerPicker(state.elements.panels.stickers)
 
-    wireTabs()
     wireActions()
     await redrawDisplay()
 }
@@ -77,10 +76,17 @@ function renderFilterPicker(panelEl) {
     for (const f of FILTERS) {
         const tile = document.createElement('button')
         tile.className = 'tool-item' + (f.id === state.currentFilter ? ' active' : '')
-        tile.innerHTML = `
-          <div class="swatch" style="filter: ${f.css}; background: linear-gradient(135deg, #f7b8d7, #c8a24a);"></div>
-          <div class="label">${f.label}</div>
-        `
+        const swatch = f.icon
+            ? `<div class="swatch swatch-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M8 7 L9.4 4.6 L14.6 4.6 L16 7" />
+                  <rect x="3" y="7" width="18" height="12" rx="2" />
+                  <circle cx="12" cy="13" r="4" />
+                  <circle cx="17.5" cy="10" r="0.6" fill="currentColor" />
+                </svg>
+              </div>`
+            : `<div class="swatch" style="filter: ${f.css}; background: linear-gradient(135deg, #f7b8d7, #c8a24a);"></div>`
+        tile.innerHTML = `${swatch}<div class="label">${f.label}</div>`
         tile.addEventListener('click', () => {
             state.currentFilter = f.id
             panelEl.querySelectorAll('.tool-item').forEach(el => el.classList.toggle('active', el === tile))
@@ -116,18 +122,6 @@ async function onBackdropChange(backdrop) {
     } finally {
         hideEditorProcessing()
     }
-}
-
-function wireTabs() {
-    const tabs = document.querySelectorAll('.tool-tab')
-    const panels = document.querySelectorAll('.tool-panel')
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            const name = tab.dataset.tab
-            tabs.forEach(t => t.classList.toggle('active', t === tab))
-            panels.forEach(p => p.classList.toggle('active', p.dataset.panel === name))
-        })
-    })
 }
 
 function wireActions() {
