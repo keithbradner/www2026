@@ -22,6 +22,7 @@ const els = {
     photosGrid: document.getElementById('photos-grid'),
     photoCount: document.getElementById('photo-count'),
     btnDeleteAllPhotos: document.getElementById('btn-delete-all-photos'),
+    btnDownloadAllPhotos: document.getElementById('btn-download-all-photos'),
 
     logsTbody: document.getElementById('logs-tbody'),
     logTypeFilter: document.getElementById('log-type-filter'),
@@ -242,6 +243,34 @@ els.btnDeleteAllPhotos.addEventListener('click', async () => {
     if (!confirm('Delete ALL photos? This cannot be undone.')) return
     await fetch('/api/photos', { method: 'DELETE' })
     refreshPhotos()
+})
+
+els.btnDownloadAllPhotos.addEventListener('click', async () => {
+    const original = els.btnDownloadAllPhotos.textContent
+    els.btnDownloadAllPhotos.disabled = true
+    els.btnDownloadAllPhotos.textContent = 'Bundling…'
+    try {
+        // Fetch as blob so a slow server build doesn't tear down the page
+        // mid-download and so we can swap the button label back when done.
+        const res = await fetch('/api/admin/photos/zip')
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        const blob = await res.blob()
+        const url = URL.createObjectURL(blob)
+        const stamp = new Date().toISOString().slice(0, 10)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = `wwww-photos-${stamp}.zip`
+        document.body.appendChild(a)
+        a.click()
+        a.remove()
+        URL.revokeObjectURL(url)
+    } catch (err) {
+        console.error(err)
+        alert('Download failed — see console.')
+    } finally {
+        els.btnDownloadAllPhotos.disabled = false
+        els.btnDownloadAllPhotos.textContent = original
+    }
 })
 
 // ------------- Logs -------------

@@ -29,6 +29,7 @@ import {
     removeAuctionImageAtSlot,
     getAuctionImage
 } from './db.js'
+import { buildZip } from './zip.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -213,6 +214,35 @@ app.delete('/api/photos', async (req, res) => {
         res.json({ success: true })
     } catch (error) {
         res.status(500).json({ error: 'Failed to delete photos' })
+    }
+})
+
+// Admin-only: bundle every photo into a single zip download.
+app.get('/api/admin/photos/zip', async (_req, res) => {
+    try {
+        const list = await getPhotos()
+        const entries = []
+        for (const meta of list) {
+            const photo = await getPhoto(meta.id)
+            if (!photo) continue
+            const m = /^data:([^;]+);base64,(.+)$/.exec(photo.image || '')
+            if (!m) continue
+            const [, mime, b64] = m
+            const ext = mime === 'image/png' ? 'png' : 'jpg'
+            entries.push({
+                name: `wwww-${meta.id}.${ext}`,
+                data: Buffer.from(b64, 'base64')
+            })
+        }
+        const zip = buildZip(entries)
+        const stamp = new Date().toISOString().slice(0, 10)
+        res.setHeader('Content-Type', 'application/zip')
+        res.setHeader('Content-Disposition', `attachment; filename="wwww-photos-${stamp}.zip"`)
+        res.setHeader('Content-Length', zip.length)
+        res.send(zip)
+    } catch (error) {
+        console.error('Photo zip failed:', error)
+        res.status(500).json({ error: 'Failed to build zip' })
     }
 })
 
