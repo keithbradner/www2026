@@ -5,6 +5,7 @@
 export const state = {
     // Runtime
     videoStream: null,
+    fallbackCanvas: null,   // Pre-rendered placeholder used when no camera is available
     capturedCanvas: null,   // OffscreenCanvas-like: HTMLCanvasElement with the raw capture (4:5)
     segMask: null,          // Float32Array soft mask, capture resolution
     baseCanvas: null,       // HTMLCanvasElement — source-of-truth after optional BG swap

@@ -2,6 +2,11 @@
  * Camera init, countdown, and capture.
  * Adapted from timmons/src/photobooth.js (lines 144-283), with the 4K
  * resolution constraint relaxed to tablet-friendly 1920x2400.
+ *
+ * If the camera is unavailable (no device, denied permission, insecure
+ * context, etc.) the panel falls back to a static backdrop image so the
+ * user can still tap "Take Photo" and walk the rest of the editor flow —
+ * useful for demos on machines without a webcam.
  */
 
 import { state } from './state.js'
@@ -9,6 +14,7 @@ import { state } from './state.js'
 const CAPTURE_ASPECT = 4 / 5
 const IDEAL_WIDTH = 1440
 const IDEAL_HEIGHT = 1800
+const FALLBACK_BACKDROP_SRC = '/backdrops/90s-doodles.jpg'
 
 const BASE_VIDEO_CONSTRAINTS = {
     width: { ideal: IDEAL_WIDTH },
@@ -27,6 +33,11 @@ const ADVANCED_VIDEO_CONSTRAINTS = {
 }
 
 async function requestCamera() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        const err = new Error('mediaDevices.getUserMedia not available')
+        err.name = 'NotSupportedError'
+        throw err
+    }
     try {
         return await navigator.mediaDevices.getUserMedia({
             video: ADVANCED_VIDEO_CONSTRAINTS,
@@ -46,28 +57,30 @@ async function requestCamera() {
 
 function describeCameraError(err) {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        return 'Camera not available. This page must be loaded over https:// or localhost.'
+        return 'No camera — demo mode'
     }
     if (!window.isSecureContext) {
-        return 'Insecure context: camera requires https:// or localhost.'
+        return 'Insecure context — demo mode'
     }
     switch (err && err.name) {
         case 'NotAllowedError':
         case 'SecurityError':
-            return 'Camera access denied. Enable camera permission for this site in your browser.'
+            return 'Camera blocked — demo mode'
         case 'NotFoundError':
         case 'OverconstrainedError':
-            return 'No compatible camera found on this device.'
+            return 'No camera — demo mode'
         case 'NotReadableError':
-            return 'Camera is in use by another app. Close Zoom/Teams/etc. and reload.'
+            return 'Camera in use — demo mode'
         case 'AbortError':
-            return 'Camera start aborted. Reload the page to try again.'
+            return 'Camera unavailable — demo mode'
         default:
-            return `Camera error: ${(err && (err.message || err.name)) || 'unknown'}`
+            return 'No camera — demo mode'
     }
 }
 
 export async function initCamera() {
+    resetCameraUI()
+
     try {
         const stream = await requestCamera()
         state.videoStream = stream
@@ -81,9 +94,104 @@ export async function initCamera() {
         state.elements.cameraLoading.classList.add('hidden')
         state.elements.captureBtn.disabled = false
     } catch (err) {
-        console.error('Camera error:', err)
-        state.elements.cameraLoading.textContent = describeCameraError(err)
+        console.warn('Camera unavailable — entering demo fallback:', err)
+        await enterFallbackMode(describeCameraError(err))
     }
+}
+
+function resetCameraUI() {
+    state.fallbackCanvas = null
+
+    const video = state.elements.video
+    video.style.display = ''
+
+    const previewFrame = video.parentElement
+    previewFrame.style.backgroundImage = ''
+    previewFrame.style.backgroundSize = ''
+    previewFrame.style.backgroundPosition = ''
+
+    const lookHere = document.querySelector('.look-here')
+    if (lookHere) lookHere.style.display = ''
+
+    state.elements.cameraLoading.classList.remove('hidden')
+    state.elements.cameraLoading.textContent = 'Starting camera…'
+    state.elements.captureBtn.disabled = true
+}
+
+async function enterFallbackMode(message) {
+    try {
+        state.fallbackCanvas = await createFallbackCanvas(FALLBACK_BACKDROP_SRC)
+    } catch (imgErr) {
+        console.error('Fallback backdrop failed to load, using flat fill:', imgErr)
+        state.fallbackCanvas = createFlatFallbackCanvas()
+    }
+
+    const video = state.elements.video
+    video.style.display = 'none'
+
+    const previewFrame = video.parentElement
+    previewFrame.style.backgroundImage = `url("${FALLBACK_BACKDROP_SRC}")`
+    previewFrame.style.backgroundSize = 'cover'
+    previewFrame.style.backgroundPosition = 'center'
+
+    // "Look here!" points at the (missing) camera lens — hide it in demo mode.
+    const lookHere = document.querySelector('.look-here')
+    if (lookHere) lookHere.style.display = 'none'
+
+    state.elements.cameraLoading.classList.remove('hidden')
+    state.elements.cameraLoading.textContent = message
+    state.elements.captureBtn.disabled = false
+}
+
+async function createFallbackCanvas(src) {
+    const img = await loadImage(src)
+    const c = document.createElement('canvas')
+    c.width = IDEAL_WIDTH
+    c.height = IDEAL_HEIGHT
+    drawCover(c.getContext('2d'), img, IDEAL_WIDTH, IDEAL_HEIGHT)
+    return c
+}
+
+function createFlatFallbackCanvas() {
+    const c = document.createElement('canvas')
+    c.width = IDEAL_WIDTH
+    c.height = IDEAL_HEIGHT
+    const ctx = c.getContext('2d')
+    const grad = ctx.createLinearGradient(0, 0, IDEAL_WIDTH, IDEAL_HEIGHT)
+    grad.addColorStop(0, '#2a1a38')
+    grad.addColorStop(0.5, '#ff3fa4')
+    grad.addColorStop(1, '#5ec8ff')
+    ctx.fillStyle = grad
+    ctx.fillRect(0, 0, IDEAL_WIDTH, IDEAL_HEIGHT)
+    return c
+}
+
+function loadImage(src) {
+    return new Promise((resolve, reject) => {
+        const img = new Image()
+        img.crossOrigin = 'anonymous'
+        img.onload = () => resolve(img)
+        img.onerror = reject
+        img.src = src
+    })
+}
+
+function drawCover(ctx, image, targetW, targetH) {
+    const iw = image.width, ih = image.height
+    const ta = targetW / targetH, ia = iw / ih
+    let dw, dh, dx, dy
+    if (ia > ta) {
+        dh = targetH
+        dw = dh * ia
+        dx = (targetW - dw) / 2
+        dy = 0
+    } else {
+        dw = targetW
+        dh = dw / ia
+        dx = 0
+        dy = (targetH - dh) / 2
+    }
+    ctx.drawImage(image, dx, dy, dw, dh)
 }
 
 export function stopCamera() {
@@ -94,7 +202,10 @@ export function stopCamera() {
 }
 
 export function startCountdown(onDone) {
-    if (!state.elements.video.videoWidth) return
+    const hasVideo = state.elements.video.videoWidth > 0
+    const hasFallback = !!state.fallbackCanvas
+    if (!hasVideo && !hasFallback) return
+
     state.elements.captureBtn.disabled = true
     state.elements.countdownOverlay.classList.remove('hidden')
 
@@ -111,8 +222,10 @@ export function startCountdown(onDone) {
         } else {
             clearInterval(interval)
             state.elements.countdownOverlay.classList.add('hidden')
-            const canvas = captureFrame(state.elements.video)
-            state.elements.video.pause()
+            const canvas = hasVideo
+                ? captureFrame(state.elements.video)
+                : state.fallbackCanvas
+            if (hasVideo) state.elements.video.pause()
             setTimeout(() => onDone(canvas), 30)
         }
     }, 1000)
