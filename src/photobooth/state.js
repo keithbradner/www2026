@@ -12,6 +12,7 @@ export const state = {
     currentFilter: 'none',
     currentFrame: null,     // { src } or null
     stickers: [],           // [{ id, src, x, y, scale, rotation, el, pickerSrc, widthNorm }]
+    fxSeed: 1,              // Per-edit seed so post-FX (sparkles, grain) stay stable across redraws
 
     // DOM references set at init
     elements: {}

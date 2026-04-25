@@ -9,7 +9,7 @@
  */
 
 import { state } from './state.js'
-import { FILTERS, getFilterCss } from './filters.js'
+import { FILTERS, getFilter } from './filters.js'
 import { FRAME_LIBRARY, renderFramePicker } from './frames.js'
 import {
     BACKDROP_LIBRARY,
@@ -20,9 +20,30 @@ import {
 } from './backdrops.js'
 import { createMaskedSubject, drawCoverTo } from './segmentation.js'
 import { STICKER_LIBRARY, initStickers, renderStickerPicker, clearStickers } from './stickers.js'
+import { mulberry32, loadSpriteSet } from './effects.js'
 
 const EXPORT_WIDTH = 2000
 const EXPORT_HEIGHT = 2500
+
+// Sprite groups used by filter post-effects. Preloaded once per session.
+// (Sparkles draws its glints procedurally — no sprite needed for those.)
+const SPRITE_GROUPS = {
+    discoBalls: ['/stickers/disco-ball.svg'],
+    hearts:     ['/stickers/heart.svg']
+}
+let spritesPromise = null
+function ensureSpritesLoaded() {
+    if (!spritesPromise) {
+        spritesPromise = (async () => {
+            const [discoBalls, hearts] = await Promise.all([
+                loadSpriteSet(SPRITE_GROUPS.discoBalls),
+                loadSpriteSet(SPRITE_GROUPS.hearts)
+            ])
+            return { discoBalls, hearts }
+        })()
+    }
+    return spritesPromise
+}
 
 let canvas = null
 let ctx = null
@@ -37,9 +58,11 @@ export async function initEditor({ capturedCanvas }) {
     state.currentFilter = 'none'
     state.currentFrame = null
     state.stickers = []
+    state.fxSeed = (Math.random() * 0x7FFFFFFF) | 0 || 1
     backdropImg = null
     maskedSubjectCanvas = null
     clearBackdropCache()
+    ensureSpritesLoaded()  // kick off preloading; awaited lazily by compositeScene
 
     canvas = state.elements.editorCanvas
     stageEl = canvas.parentElement
@@ -147,7 +170,8 @@ function resetEdits() {
  * Filter applies ONLY to the photo (subject); backdrop/frame/stickers stay clean.
  */
 async function compositeScene(targetCtx, w, h) {
-    const filterCss = getFilterCss(state.currentFilter)
+    const filter = getFilter(state.currentFilter)
+    const filterCss = filter?.css || 'none'
 
     if (backdropImg && maskedSubjectCanvas) {
         // Backdrop first, no filter, cover-fit.
@@ -166,6 +190,25 @@ async function compositeScene(targetCtx, w, h) {
         targetCtx.save()
         targetCtx.filter = filterCss
         targetCtx.drawImage(state.capturedCanvas, 0, 0, w, h)
+        targetCtx.restore()
+    }
+
+    // Post-FX (sparkles, scanlines, halftone, bloom, etc.) — scoped to photo
+    // layer, painted before frames + stickers.
+    if (filter?.post) {
+        const sprites = await ensureSpritesLoaded()
+        const sourceCanvas = (backdropImg && maskedSubjectCanvas) ? maskedSubjectCanvas : state.capturedCanvas
+        const seed = state.fxSeed | 0 || 1
+        const fx = {
+            sourceCanvas,
+            scale: w / EXPORT_WIDTH,
+            seed,
+            makeRng: (salt = 0) => mulberry32((seed ^ (salt * 0x9E3779B1)) | 0),
+            sprites
+        }
+        targetCtx.save()
+        targetCtx.filter = 'none'
+        await filter.post(targetCtx, w, h, fx)
         targetCtx.restore()
     }
 
