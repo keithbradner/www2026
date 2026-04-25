@@ -84,6 +84,43 @@ const upload = multer({
     limits: { fileSize: 20 * 1024 * 1024 }
 })
 
+// HTTP Basic Auth gate for admin surfaces. When ADMIN_PASSWORD is unset or
+// blank, the gate opens for everyone — convenient for local dev. The browser
+// caches the credential for the origin once the user logs in, so subsequent
+// fetch() calls from the admin page automatically carry it.
+function requireAdminAuth(req, res, next) {
+    const required = process.env.ADMIN_PASSWORD || ''
+    if (!required) return next()
+
+    const challenge = () => {
+        res.setHeader('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
+        res.status(401).send('Authentication required')
+    }
+
+    const header = req.headers.authorization || ''
+    if (!header.startsWith('Basic ')) return challenge()
+
+    let decoded = ''
+    try { decoded = Buffer.from(header.slice(6), 'base64').toString('utf8') }
+    catch { return challenge() }
+
+    // Username can be anything; we only check the password (everything after
+    // the first colon, so passwords containing colons survive).
+    const idx = decoded.indexOf(':')
+    const submitted = idx >= 0 ? decoded.slice(idx + 1) : decoded
+    if (submitted !== required) return challenge()
+    next()
+}
+
+// Gate the admin HTML page in both dev (Vite middleware) and prod (explicit
+// static route). Place this before any HTML-serving middleware.
+app.use((req, res, next) => {
+    if (req.method === 'GET' && (req.path === '/admin' || req.path === '/admin.html')) {
+        return requireAdminAuth(req, res, next)
+    }
+    next()
+})
+
 // ------------------------------------------------------------------
 // PHOTOS API
 // ------------------------------------------------------------------
@@ -185,7 +222,7 @@ app.post('/api/photos/:id/log-download', async (req, res) => {
     }
 })
 
-app.patch('/api/photos/:id', async (req, res) => {
+app.patch('/api/photos/:id', requireAdminAuth, async (req, res) => {
     try {
         const photo = await getPhoto(req.params.id)
         if (!photo) return res.status(404).json({ error: 'Photo not found' })
@@ -199,7 +236,7 @@ app.patch('/api/photos/:id', async (req, res) => {
     }
 })
 
-app.delete('/api/photos/:id', async (req, res) => {
+app.delete('/api/photos/:id', requireAdminAuth, async (req, res) => {
     try {
         await deletePhoto(req.params.id)
         res.json({ success: true })
@@ -208,7 +245,7 @@ app.delete('/api/photos/:id', async (req, res) => {
     }
 })
 
-app.delete('/api/photos', async (req, res) => {
+app.delete('/api/photos', requireAdminAuth, async (req, res) => {
     try {
         await deleteAllPhotos()
         res.json({ success: true })
@@ -218,7 +255,7 @@ app.delete('/api/photos', async (req, res) => {
 })
 
 // Admin-only: bundle every photo into a single zip download.
-app.get('/api/admin/photos/zip', async (_req, res) => {
+app.get('/api/admin/photos/zip', requireAdminAuth, async (_req, res) => {
     try {
         const list = await getPhotos()
         const entries = []
@@ -245,6 +282,9 @@ app.get('/api/admin/photos/zip', async (_req, res) => {
         res.status(500).json({ error: 'Failed to build zip' })
     }
 })
+
+// All `/api/admin/*` routes below are gated by Basic Auth.
+app.use('/api/admin', requireAdminAuth)
 
 // ------------------------------------------------------------------
 // AUCTION ITEMS API
