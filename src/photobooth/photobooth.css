@@ -214,17 +214,29 @@
   text-shadow: 0 2px 0 rgba(0,0,0,0.25);
 }
 
-/* ---- Countdown ---- */
+/* ---- Countdown ----
+   Fullscreen overlay so the number+burst can travel from preview center up
+   to the top of the screen during the count, leading the user's gaze toward
+   the camera lens above the screen. */
 .countdown-overlay {
-  position: absolute;
+  position: fixed;
   inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  background: rgba(10, 6, 20, 0.4);
+}
+.countdown-stack {
+  position: absolute;
+  left: 50%;
+  /* JS sets `top` and `transition` inline at countdown start to drive a
+     single 3s glide from this default toward the top of the screen. */
+  top: 55%;
+  width: min(80vw, 56vh, 700px);
+  aspect-ratio: 4 / 5;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
-  pointer-events: none;
-  background: rgba(10, 6, 20, 0.35);
-  border-radius: 6px;
+  transform: translate(-50%, -50%);
 }
 .countdown-burst {
   position: absolute;

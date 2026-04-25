@@ -110,9 +110,6 @@ function resetCameraUI() {
     previewFrame.style.backgroundSize = ''
     previewFrame.style.backgroundPosition = ''
 
-    const lookHere = document.querySelector('.look-here')
-    if (lookHere) lookHere.style.display = ''
-
     state.elements.cameraLoading.classList.remove('hidden')
     state.elements.cameraLoading.textContent = 'Starting camera…'
     state.elements.captureBtn.disabled = true
@@ -133,10 +130,6 @@ async function enterFallbackMode(message) {
     previewFrame.style.backgroundImage = `url("${FALLBACK_BACKDROP_SRC}")`
     previewFrame.style.backgroundSize = 'cover'
     previewFrame.style.backgroundPosition = 'center'
-
-    // "Look here!" points at the (missing) camera lens — hide it in demo mode.
-    const lookHere = document.querySelector('.look-here')
-    if (lookHere) lookHere.style.display = 'none'
 
     state.elements.cameraLoading.classList.remove('hidden')
     state.elements.cameraLoading.textContent = message
@@ -207,7 +200,33 @@ export function startCountdown(onDone) {
     if (!hasVideo && !hasFallback) return
 
     state.elements.captureBtn.disabled = true
+
+    // Stack glides from preview center to the top of the screen over the
+    // full 3s countdown so eyes follow it up toward the camera lens.
+    const stack = document.getElementById('countdown-stack')
+
     state.elements.countdownOverlay.classList.remove('hidden')
+
+    if (stack) {
+        // Snap-reset to the start state with no transition.
+        stack.style.transition = 'none'
+        stack.style.top = '55%'
+        stack.style.transform = 'translate(-50%, -50%) scale(1)'
+        // Two rAFs: first lets the browser paint the start frame after
+        // the overlay un-hides; second flips on the long transition so
+        // it actually animates instead of jumping to the end state.
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                stack.style.transition =
+                    'top 3000ms cubic-bezier(0.4, 0, 0.6, 1),' +
+                    'transform 3000ms cubic-bezier(0.4, 0, 0.6, 1)'
+                // Above the viewport + shrunk to a vanishing point, so it
+                // launches up off-screen right as the shutter clicks.
+                stack.style.top = '0%'
+                stack.style.transform = 'translate(-50%, -50%) scale(0.25)'
+            })
+        })
+    }
 
     let count = 3
     state.elements.countdownNumber.textContent = count
