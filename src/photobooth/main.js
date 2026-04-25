@@ -12,7 +12,7 @@ import QRCode from 'qrcode'
 // Public base URL used for QR codes and gallery links. The kiosk may be
 // serving itself over LAN, but the phone scanning the QR needs the public
 // Railway URL to reach the photo.
-const PUBLIC_BASE_URL = 'https://jhm.up.railway.app'
+const PUBLIC_BASE_URL = 'https://jhmuseum.org'
 
 mountNav('#top-nav')
 
@@ -146,7 +146,7 @@ function uploadErrorMessage(err) {
 }
 
 async function showSuccess(id) {
-    const url = `${PUBLIC_BASE_URL}/gallery?photo=${id}`
+    const url = `${PUBLIC_BASE_URL}/gallery.html?photo=${id}`
     showPanel('success')
     await QRCode.toCanvas(state.elements.qrCanvas, url, {
         width: 240,
