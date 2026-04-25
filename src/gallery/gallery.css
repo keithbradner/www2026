@@ -151,11 +151,14 @@
   border-radius: 8px;
   box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
   cursor: default;
-  /* Leave iOS long-press callout enabled so "Save to Photos" works from
-     the image directly on iOS Safari. */
+  /* theme.css sets user-select:none on <html> to suppress kiosk text
+     selection, which on iOS Safari flips the long-press gesture from the
+     "Save to Photos" callout into drag-to-lift. Override here so the
+     callout works. */
   -webkit-touch-callout: default;
-  -webkit-user-select: none;
-  user-select: none;
+  -webkit-user-select: auto;
+  user-select: auto;
+  -webkit-user-drag: none;
 }
 .lightbox-close {
   position: absolute;

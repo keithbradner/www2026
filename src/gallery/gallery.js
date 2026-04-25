@@ -3,9 +3,19 @@
  */
 
 import { mountNav } from '../shared/nav.js'
+import { setupInactivityTimer } from '../shared/inactivity.js'
 
-mountNav('#top-nav-left', { destination: 'auction', corner: 'left' })
-mountNav('#top-nav-right', { destination: 'photobooth', corner: 'right' })
+// Kiosk-only nav: only show the auction/photobooth jump buttons when the
+// visitor came from the kiosk itself. Phones arriving from a QR code scan
+// (or any external referrer) shouldn't see them.
+const KIOSK_ORIGIN = 'https://jhm.up.railway.app'
+if (document.referrer.startsWith(KIOSK_ORIGIN + '/')) {
+    mountNav('#top-nav-left', { destination: 'auction', corner: 'left' })
+    mountNav('#top-nav-right', { destination: 'photobooth', corner: 'right' })
+
+    // Idle kiosk visitors → return to the auction carousel.
+    setupInactivityTimer(() => { window.location.href = '/' }, 5 * 60 * 1000)
+}
 
 const REFRESH_MS = 30_000
 const CAPTIONS = [
