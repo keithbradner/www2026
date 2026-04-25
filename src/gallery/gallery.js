@@ -8,7 +8,17 @@ mountNav('#top-nav-left', { destination: 'auction', corner: 'left' })
 mountNav('#top-nav-right', { destination: 'photobooth', corner: 'right' })
 
 const REFRESH_MS = 30_000
-const CAPTIONS = ['♥ fan club', 'omg!', 'BFF', 'yes pls', '★ VIP ★', 'dream', 'no. 1', 'heart-throb', 'backstage', 'mixtape']
+const CAPTIONS = [
+    '♥ fan club', 'omg!', 'BFF', 'yes pls', '★ VIP ★', 'dream', 'no. 1',
+    'heart-throb', 'backstage', 'mixtape', 'crush', 'icon', 'all access',
+    'sparkle', 'tour bus', 'front row', 'autograph', 'glitter', 'as if!',
+    'so extra', '4ever', 'xoxo', 'cutie', 'meant 2 be', 'serving looks',
+    'rock star', 'diva', 'main character', 'vibes only', 'wish list',
+    'limited edition', 'no. 1 fan', 'soulmate', '90s baby', 'iconic',
+    'made the cut', 'plastered up', 'flawless', 'too cute', 'on repeat',
+    'bestie', 'screen saver', 'locker pic', 'pen pal', 'class pic',
+    'POV: smitten', 'tee hee', 'whoa!', 'major key', 'queen', 'glow up'
+]
 
 const gridEl = document.getElementById('gallery-grid')
 const emptyEl = document.getElementById('gallery-empty')

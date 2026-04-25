@@ -556,13 +556,12 @@
   overflow-x: auto;
   overflow-y: hidden;
   padding: 4px 2px;
-  scrollbar-width: thin;
-  scrollbar-color: var(--hot) transparent;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   min-width: 0;
   -webkit-overflow-scrolling: touch;
 }
-.tool-panel::-webkit-scrollbar { height: 6px; }
-.tool-panel::-webkit-scrollbar-thumb { background: var(--hot); border-radius: 999px; }
+.tool-panel::-webkit-scrollbar { display: none; }
 /* Floating Reset All button — absolute in the .panel-editor (fixed inset:0),
    so it sits in the viewport's bottom-left corner. Reverts all edits and
    returns the canvas to the raw captured photo. */
