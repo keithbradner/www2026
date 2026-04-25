@@ -22,12 +22,20 @@ const ICON_TICKET = `
 
 const DRAG_THRESHOLD_PX = 6
 
-export function mountNav(target = '#top-nav') {
+export function mountNav(target = '#top-nav', options = {}) {
     const host = typeof target === 'string' ? document.querySelector(target) : target
     if (!host) return
 
     const path = window.location.pathname
     const onPhotobooth = path.startsWith('/photobooth')
+
+    // Caller may pin destination/corner; otherwise auto-detect from path.
+    // When pinned, drag-to-reposition is disabled — gallery shows fixed
+    // buttons in both corners and we don't want them moving around.
+    const destinationKey = options.destination
+        || (onPhotobooth ? 'auction' : 'photobooth')
+    const corner = options.corner || 'right'
+    const draggable = !options.destination
 
     const btn = document.createElement('button')
     btn.className = 'nav-btn'
@@ -40,8 +48,7 @@ export function mountNav(target = '#top-nav') {
     `
 
     let destination
-    const storageKey = onPhotobooth ? 'wwww.navPos.auction' : 'wwww.navPos.photobooth'
-    if (onPhotobooth) {
+    if (destinationKey === 'auction') {
         btn.innerHTML = passInner(ICON_TICKET, 'Auction')
         btn.setAttribute('aria-label', 'Back to auction')
         destination = '/'
@@ -52,16 +59,20 @@ export function mountNav(target = '#top-nav') {
     }
 
     const wrap = document.createElement('nav')
-    wrap.className = 'top-nav'
+    wrap.className = `top-nav top-nav-${corner}`
     wrap.appendChild(btn)
     host.replaceWith(wrap)
 
-    // Restore saved position after the element is in the DOM (so we can measure).
-    applySavedPosition(wrap, storageKey)
-    // Re-clamp on window resize so the button doesn't end up off-screen.
-    window.addEventListener('resize', () => applySavedPosition(wrap, storageKey))
-
-    attachDragAndClick(btn, wrap, storageKey, destination)
+    if (draggable) {
+        const storageKey = `wwww.navPos.${destinationKey}`
+        applySavedPosition(wrap, storageKey)
+        window.addEventListener('resize', () => applySavedPosition(wrap, storageKey))
+        attachDragAndClick(btn, wrap, storageKey, destination)
+    } else {
+        btn.addEventListener('click', () => {
+            window.location.href = destination
+        })
+    }
 }
 
 function applySavedPosition(wrap, storageKey) {

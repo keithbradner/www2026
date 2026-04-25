@@ -8,6 +8,11 @@
   pointer-events: none;
 }
 
+.top-nav.top-nav-left {
+  left: var(--space-6);
+  right: auto;
+}
+
 .top-nav .nav-btn {
   pointer-events: auto;
   position: relative;

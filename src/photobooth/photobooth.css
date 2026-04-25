@@ -767,18 +767,19 @@
 }
 .confirm-note p {
   margin: 0;
-  font-family: var(--font-hand);
-  font-size: 20px;
-  line-height: 1.4;
+  font-family: var(--font-sans);
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.45;
 }
 .confirm-note strong { color: var(--hot-deep); font-weight: 700; }
 .confirm-note code {
   background: var(--highlighter);
-  padding: 1px 8px;
+  padding: 2px 10px;
   border-radius: 4px;
   border: 1.5px solid var(--ink);
   font-family: ui-monospace, Menlo, monospace;
-  font-size: 16px;
+  font-size: 20px;
 }
 
 .confirm-actions {
@@ -831,7 +832,15 @@
 .success-title,
 .success-sub,
 .qr-card,
-#btn-again { position: relative; z-index: 1; }
+.success-actions { position: relative; z-index: 1; }
+
+.success-actions {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
 
 .success-title {
   font-family: var(--font-display);

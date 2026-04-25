@@ -46,7 +46,8 @@ setElements({
 
     qrCanvas: document.getElementById('qr-canvas'),
     qrLink: document.getElementById('qr-link'),
-    btnAgain: document.getElementById('btn-again')
+    btnAgain: document.getElementById('btn-again'),
+    btnViewGallery: document.getElementById('btn-view-gallery')
 })
 
 // Flattened dataURL carries over from editor → confirm → post.
@@ -107,6 +108,10 @@ state.elements.btnConfirmPost.addEventListener('click', async () => {
 
 state.elements.btnAgain.addEventListener('click', () => {
     window.location.reload()
+})
+
+state.elements.btnViewGallery.addEventListener('click', () => {
+    window.location.href = '/gallery'
 })
 
 async function uploadPhoto(dataUrl) {

@@ -2,6 +2,11 @@
  * /gallery — public photo wall. Newest first, click-to-zoom, auto-refresh.
  */
 
+import { mountNav } from '../shared/nav.js'
+
+mountNav('#top-nav-left', { destination: 'auction', corner: 'left' })
+mountNav('#top-nav-right', { destination: 'photobooth', corner: 'right' })
+
 const REFRESH_MS = 30_000
 const CAPTIONS = ['♥ fan club', 'omg!', 'BFF', 'yes pls', '★ VIP ★', 'dream', 'no. 1', 'heart-throb', 'backstage', 'mixtape']
 
